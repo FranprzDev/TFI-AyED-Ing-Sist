@@ -1,0 +1,25 @@
+Universidad Tecnologica Nacional
+Facultad regional de Tucuman
+
+Ingenieria en sistemas de información
+Algoritmo y estructura de datos
+
+Autores:
+	Perez Francisco Miguel, 56355
+		FranciscoMiguel.Perez@alu.frt.utn.edu.ar 
+
+	Rosconi Ignacio Federico, 52685
+		Ignacio.Rosconi@alu.frt.utn.edu.ar
+
+	Pastrana Angel Daniel,53379
+		Angel.Pastrana@alu.frt.utn.edu.ar
+
+	Gerez Braian Esteban Nicolas, 48301
+		Braian.Gerez@alu.frt.utn.edu.ar
+
+	Paez Oscar Ignacio, 52396
+		Oscar.Paez@alu.frt.utn.edu.ar
+
+
+Archivos utilizados:
+ https://drive.google.com/file/d/1CHBLYY8LXDmM7qF7XhPQhTGdCR1VVdyN/view?usp=sharing
