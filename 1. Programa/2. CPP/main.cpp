@@ -3,16 +3,26 @@
 #include <string.h>
 #include <time.h>
 #include <string.h>
-#include "../0. Librerias/mylibrery.h"
+#include<windows.h>
+#include "../0. Librerias/menus.h"
+#include "../0. Librerias/funcGeneral.h"
 
-int menuPrincipal();
-int menuGym();
-int menuReception();
-int menuAdminsitration();
-
+struct user{
+    char nombreUsuario[10];
+    char contrasenia[32];
+};
 
 main(){
+    /*
+        Punteros & Archivos
+    */
 
+    FILE *usuarios;
+    FILE *entrenadores;
+
+    usuarios = fopen("../1. Archivos/Usuarios.dat","a+b");
+    entrenadores = fopen("../1. Archivos/Entrenadores.dat","a+b");
+    
     /* 
         Sección de Varaibles & Constantes
     */
@@ -21,6 +31,8 @@ main(){
     int opcSwitchGym = 0;
     int opcSwitchReception = 0;
     int opcSwitchAdministration = 0;
+    int opcIngreso = 0;
+    int typeOfUser = 0;
 
     /*
         Seccción de Código
@@ -29,18 +41,50 @@ main(){
     do{
         system("cls");
 
-        opc = menuPrincipal()
+        opc = menuPrincipal();
 
         switch(opc){
+            case 0:
+                opcIngreso = ingresar();
+                
+                switch(opcIngreso){
+                    case 1:
+            
+                        typeOfUser = typeUser();
+                        system("cls");
+                        Sleep(100);
+
+                        switch(typeOfUser){
+                            case 1:
+                                printf("\n\nEl tipo de usuario que eligio es NORMAL \n");
+                                printf("Crearemos una cuenta del tipo normal. \n");
+
+                                //generarCuentaNormal();
+                                break;
+                            case 2:
+                                printf("\n\nEl tipo de usuario que eligio es ENTRENADOR \n");  
+                                printf("Crearemos una cuenta del tipo entrenador. \n");
+
+                                //generarCuentaEntrenador();
+                                break;    
+                            default:
+                                printf("Eligio un tipo de usuario incorrecto.");
+                                break;                        
+                        }
+                    case 2:
+
+                    case 3:
+                    // salir al menú principal
+                    break;
+                }
+            break;
             case 1:
                 system("cls");
                 opcSwitchGym = menuGym();
 
                 switch(opcSwitchGym){
-                    case 1:
-                        // iniciarSesion_GYM();
                     break;
-                    case 2:
+                    case 1:
                         // Listado de Socios - Desarrollo de actividad
                         /*
                             Aca depende mucho como quieran programarlo, si es que realmente
@@ -48,12 +92,11 @@ main(){
                             + facil 1 swtich con 1 listado de socios y 2 actividad y listo
                         */
                     break;
-                    case 3:
+                    case 2:
                         // registrarRutina_GYM();
                     break;
-                    case 4:
+                    case 3:
                         printf("\n\nOk. Cerraremos el Programa.");
-                        banderaCerrado = 0;
                         /* 
                             aca estos cierres de aplicacion lo podemos trabajar de 2 formas:
                             depende como lo quieran trabajar usteeds lo hacemos ...
@@ -68,6 +111,13 @@ main(){
                             Aquí se utiliza la idea de no toquetear de forma rara.
                         */ 
                     break;
+                    case 10:
+                        printf("\n\nVolviendo atras...");
+                        printf("\n\n");
+                        Sleep(1000);
+
+                        system("cls");
+                    break; 
                     default: 
                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
                         banderaCerrado = 0;
@@ -76,30 +126,35 @@ main(){
             break;
             case 2:
                 system("cls");
-                opcSwitchReception = menuReception();
+                opcSwitchReception = menuRecepcion();
                 
                 switch(opcSwitchReception){
                     // de mi parte prefiero tirar funciones void para hacer estas cosas 
                     // dentro de las funciones void hacer todo xd
                     // sugiero los nombres de las func y ademas bueno q deben hacer queda implicito
-                    case 1:
-                        // iniciarSesion_Reception();
                     break;
-                    case 2:
+                    case 1:
                         // registrarSocios_Reception()
                     break;
-                    case 3:
+                    case 2:
                         // registrarActividadesSociso_Reception();
                     break;
-                    case 4:
+                    case 3:
                         // listadoDeSocios_Reception();
                     break;
-                    case 5:
+                    case 4:
                         // listadoFechasPagos_Reception();
                     break;
-                    case 6:
+                    case 5:
                         printf("\n\nOk. Cerraremos el Programa.");
                         banderaCerrado = 0;    
+                    case 10:
+                        printf("\n\nVolviendo atras...");
+                        printf("\n\n");
+                        Sleep(1000);
+
+                        system("cls");
+                    break; 
                     break;
                     default:
                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
@@ -109,28 +164,33 @@ main(){
             break;
             case 3:
                 system("cls");
-                opcSwitchAdministration = menuAdminsitration();
+                opcSwitchAdministration = menuAdmin();
 
                 switch(opcSwitchAdministration){
-                    case 1:
-                        // iniciarSesion_Administration();
                     break;
-                    case 2:
+                    case 1:
                         // registrarUsuario_Administration();
                     break;
-                    case 3:
+                    case 2:
                         // registrarActividades_Administration();
                     break;
-                    case 4:
+                    case 3:
                         // calcularPagoEntrenador_Administration();
                     break;
-                    case 5:
+                    case 4:
                         // entrenadorMaxCargaHs_Administration();
                     break;
-                    case 6:
+                    case 5:
                         printf("\n\nOk. Cerraremos el Programa.");
                         banderaCerrado = 0;    
                     break;
+                    case 10:
+                        printf("\n\nVolviendo atras...");
+                        printf("\n\n");
+                        Sleep(1000);
+
+                        system("cls");
+                    break; 
                     default:
                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
                         banderaCerrado = 0;
@@ -151,76 +211,3 @@ main(){
     printf("\n");
 
 } // fin del main
-
-
-    /*
-        Todas estas funciones después las mandamos a la librería 
-    */
-
-int menuPrincipal(){
-    int opc = 0;
-    printf("--- Menu Principal ---\n");
-
-    printf("Bienvenido al Sistema 8teenGym");
-
-    printf("\nDecide a que módulo del sistema queires ingresar: ");
-
-    printf("\n1. Módulo GYM");
-    printf("\n2. Módulo Recepción");
-    printf("\n3. Módulo Adminsitración");
-    printf("\n4. Cerrar el programa");
-
-    printf("\nIngrese su opcion: ");
-    scanf("%d", &opc);
-
-    return opc;
-}
-
-void menuGym(){
-    int opc = 0;
-    printf("--- SubMenu GYM ---\n");
-    
-    printf("1. Iniciar sesion \n");
-    printf("2. Visualizar listado de Socios y la actividad que desarrollan\n");
-    printf("3. Registrar rutinas de Gimnasia.\n");
-    printf("4. Cerrar la aplicación\n");
-
-    printf("\nIngrese su opcion: ");
-    scanf("%d", &opc);
-
-    return opc; 
-}
-
-int menuReception(){
-    int opc = 0;
-    printf("--- SubMenu Recepcion ---\n");
-    
-    printf("1. Iniciar sesion \n");
-    printf("2. Registrar Socios\n");
-    printf("3. Registrar actividades de Socios\n");
-    printf("4. Listado de Socios\n");
-    printf("5. Listado de fechas de pagos\n");
-    printf("6. Cerrar Aplicación\n");
-
-    printf("\nIngrese su opcion: ");
-    scanf("%d", &opc);
-
-    return opc; 
-}
-
-void menuAdminsitration(){
-    int opc = 0;
-    printf("--- SubMenu Administracion ---\n");
-    
-    printf("1. Iniciar sesion \n");
-    printf("2. Registrar usuario de Recepción\n");
-    printf("3. Registrar actividades del Gym\n");
-    printf("4. Calcular pago del entrenador\n");
-    printf("5. Entrenador con mayor carga horaria\n");
-    printf("6. Cerrar Aplicacion\n");
-
-    printf("\nIngrese su opcion: ");
-    scanf("%d", &opc);
-
-    return opc; 
-}
