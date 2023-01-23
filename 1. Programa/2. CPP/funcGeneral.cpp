@@ -49,6 +49,7 @@ void generarCuentaNormal() {
             do{
                 printf("\n\nLa longitud es muy corta, vuelve a ingresar la contrasenia \n\n");
                 printf("\nIngrese la contrasenia: ");
+                _flushall();
                 gets(contrasenia);
 
                 longitud = calcLong(contrasenia);
@@ -58,9 +59,11 @@ void generarCuentaNormal() {
         }
 
         validacionContrasenia = validarContraseniaUsuarioNormal(contrasenia, longitud);
+        // validacionContrasenia obtencion de la validacion del register
+
     }
 
-}
+} // fin funcion
 
 int validarNombreUsuarioNormal(char nombreUsuario[10]){
     int validacion = 0;
@@ -98,8 +101,9 @@ int validarUnicidadNormal(char nombreUsuario[10]){
 
         comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, usuarios);
         if(comparacion == 0){ bandera = 1; }
+
+        fwrite(&comparingUser, sizeof(comparingUser), 1, usuarios);
     }
 
     if(comparacion == 0){ accept = 1; }
@@ -118,7 +122,7 @@ int validarComienzoEnMinusculaNormal(char nombreUsuario[10]){
     if(comienzaMinuscula == 1){ accept = 1; };
     
     if(accept = 0)
-    { printf("\n\nEl error esta en que el usuario empieza con minuscula.\n\n"); }
+    { printf("\n\nEl error esta en que el usuario empieza con Mayuscula.\n\n"); }
     return accept;
 }
 
@@ -145,8 +149,8 @@ int validarMinimoNormal(char nombreUsuario[10]){
     int accept = 0;
     int count;
 
-    for(int i = 0; i < n; i++)
-    { if(nombreUsuario[i] != '\0') count++; }
+    for(int i = 0; i < 10; i++)
+    { if(nombreUsuario[i] != "\0") { count++; } }
 
     if(count >= 3) {
         accept = 1;
@@ -234,20 +238,23 @@ int caracterConsecNum(char contrasenia[32], int longitudContra){
     // de 48 a 57 es numerico
     int consecutivos = 0;
     int accept = 0;
+    
     for(int i = 0; i < longitudContra-2; i++){
         if(contrasenia[i] >= 48 && contrasenia[i] <= 57){
             if(contrasenia[i+1] >= 48 && contrasenia[i+1] <= 57){
                 if(contrasenia[i+2] >= 48 && contrasenia[i+2] <= 57){
-                    consecutivos++;
+                    consecutivos = 1;
                     if(consecutivos == 1){ i = longitudContra-2; }
                 }
             }
         }
     }
 
-    if(consecutivos == 1){ accept = 1; }
+    if(consecutivos == 0){ accept = 1; }
 
-    printf("\n\nExisten al menos 3 caracteres numericos consecutivos. ");
+    if(consecutivos == 1)
+    { printf("\n\nExisten al menos 3 caracteres numericos consecutivos, no se pudo crear la contrasenia ");   }
+    
     return accept; 
 }
 
@@ -255,24 +262,35 @@ int consecutivAlfab(char contrasenia[32], int longitudContra){
     // letras consecutivas alfabeticamente.
     int seguidos = 0;
     int accept = 0;
+    int codigoAscii = 0;
 
-    for(int i=0; i<longitudContra-1; i++){
-        if(contrasenia[i] >= 48 && contrasenia[i] <= 57){
-            // determino si es un numero...
-            if(contrasenia[i] == 48 && contrasenia[i+1] == 49){ seguidos++; }
-            if(contrasenia[i] == 49 && contrasenia[i+1] == 50){ seguidos++; }
-            if(contrasenia[i] == 50 && contrasenia[i+1] == 51){ seguidos++; }
-            if(contrasenia[i] == 51 && contrasenia[i+1] == 52){ seguidos++; }
-            if(contrasenia[i] == 52 && contrasenia[i+1] == 53){ seguidos++; }
-            if(contrasenia[i] == 53 && contrasenia[i+1] == 54){ seguidos++; }
-            if(contrasenia[i] == 54 && contrasenia[i+1] == 55){ seguidos++; }
-            if(contrasenia[i] == 55 && contrasenia[i+1] == 56){ seguidos++; }
-            if(contrasenia[i] == 55 && contrasenia[i+1] == 57){ seguidos++; }
+    for(int i = 0; i < longitudContra; i++){
+        
+        if((contrasenia[i] >= 65 && contrasenia[i] <= 90) && (contrasenia[i] >= 97 && contrasenia[i] <= 122)){
+            codigoAscii = contrasenia[i];
 
-            if(seguidos >= 1){ i = longitudContra-1; }
-        }
+            // ABCEDARIO = {u,v,w,x,y,z}
+            /*
+                No hay dos caracteres que le siga ascendentemente a z (long -1)
+            */
+
+            if(contrasenia[i] >= 65 && contrasenia[i] <= 79){
+                if(contrasenia[i+1] == codigoAscii++){ seguidos++; }
+            } 
+
+            if(contrasenia[i+1] >= 97 && contrasenia[i] <= 121){
+                if(contrasenia[i+1] == codigoAscii++){ seguidos++;}
+            }   
+        
+            if(seguidos >= 1){ i = longitudContra; }
+        }    
     }
-        if(seguidos >= 1){ accept = 1; }
 
-        return accept;
+    if(seguidos >= 1)
+    { printf("\n\nNo pudimos crear la contrasenia ya que tienes mas de dos letras seguidas ascendentemente. \n"); }
+
+    if(seguidos == 0)
+    { accept = 1; }
+
+    return accept;
 }

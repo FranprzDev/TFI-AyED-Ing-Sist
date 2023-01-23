@@ -59,7 +59,7 @@ main(){
                                 printf("\n\nEl tipo de usuario que eligio es NORMAL \n");
                                 printf("Crearemos una cuenta del tipo normal. \n");
 
-                                //generarCuentaNormal();
+                                generarCuentaNormal();
                                 break;
                             case 2:
                                 printf("\n\nEl tipo de usuario que eligio es ENTRENADOR \n");  
