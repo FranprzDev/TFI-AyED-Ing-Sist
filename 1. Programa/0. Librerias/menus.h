@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+
 int menuPrincipal(){
     int opc = 0;
     printf("--- Menu Principal ---\n");
@@ -9,7 +13,7 @@ int menuPrincipal(){
 
     printf("\n\n0. Iniciar Sesion.");
     printf("\n1. Modulo GYM");
-    printf("\n2. Modulo Recepcion");
+    printf("\n2. Modulo Recepcion"); 
     printf("\n3. Modulo Adminsitracion");
     printf("\n4. Cerrar el programa");
 
@@ -108,15 +112,13 @@ void contraseniaValida(int opc){
             printf("\n\n¡Tu Contrasenia es VALIDA!\n");
             printf("\n\n¡Generaremos tu Usuario de tipo NORMAL!\n");
             printf("\nEspere...");
-            sleep(2000);
-            printf("\nUsuario 'NORMAL' generado...");
+            Sleep(2000);
             break;
         case 2:
             printf("\n\n¡Tu Contrasenia es VALIDA!\n");
             printf("\n\n¡Generaremos tu Usuario de tipo ENTRENADOR!\n");
             printf("\nEspere...");
-            sleep(2000);
-            printf("\nUsuario 'ENTRENADOR' generado...");
+            Sleep(2000);
             break;
         default:
             printf("\nImposible acceder aqui...");
@@ -180,5 +182,20 @@ void erroresRegister(int opc){
         case 6:
             printf("\n\nExisten al menos 3 caracteres numericos consecutivos. ");
             break;
+    }
+}
+
+void generacionCuentas(int opc){
+    switch(opc){
+        case 1:
+            system("cls");
+            Sleep(1000);
+            printf("\n\nSe genero correctamente la cuenta del tipo USUARIO");
+        break;
+        case 2:
+            system("cls");
+            Sleep(1000);
+            printf("\n\nSe genero correctamente la cuenta del tipo ENTRENADOR");
+        break;
     }
 }
