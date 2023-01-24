@@ -1,22 +1,7 @@
-#include "../0. Librerias/funcGeneral.h"
-
-void iniciarSesion(){
-
-    char nombreUsuario[10];
-
-    system("cls");
-
-    Sleep(1000);
-
-    printf("----- Inicio de Sesion -----");
-
-    printf("Ingrese su usuario: ");
-
-    gets()
-}  
+#include "../0. Librerias/funcRegister.h"
+#include "../0. Librerias/menus.h"
 
 void generarCuentaNormal() {
-    system("cls");
     int validacionNombreUser = 0;
     int validacionContrasenia = 0;
     int longitud = 0;
@@ -24,42 +9,60 @@ void generarCuentaNormal() {
 
     char nombreUsuario[10]
     char contrasenia[32];
-    Sleep(1000);
 
-    printf("----- CUENTA NORMAL -----\n");
-
-    printf("Ingrese su nombre de Usuario: ");
+    menuDeRegister(1);
 
     _flushall();
     gets(nombreUsuario);
 
     validacionNombreUser = validarNombreUsuarioNormal(nombreUsuario);
 
-    if(validacionNombreUser == 1){
-        printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    if(validacionNombreUser == 0){
+        do{
+            menuDeRegister(3);
 
-        _flushall();
+            _flushall();
+            gets(nombreUsuario);
 
-        printf("\nIngrese la contrasenia: ");
-        gets(contrasenia);
-
-        longitud = calcLong(contrasenia);
-
-        if(longitud < 6){
-            do{
-                printf("\n\nLa longitud es muy corta, vuelve a ingresar la contrasenia \n\n");
-                printf("\nIngrese la contrasenia: ");
-                gets(contrasenia);
-
-                longitud = calcLong(contrasenia);
-            
-                if(longitud >= 6){ bandContrasenia = 1; }
-            }while(bandContrasenia == 0 || longitud < 6);
-        }
-
-        validacionContrasenia = validarContraseniaUsuarioNormal(contrasenia, longitud);
+            validacionNombreUser = validarNombreUsuarioNormal(nombreUsuario);
+        }while(validacionNombreUser == 0);
     }
 
+    menuDeRegister(4);
+
+    _flushall();
+    gets(contrasenia);
+
+    longitud = calcLong(contrasenia);
+
+    if(longitud < 6){
+        do{
+            menuDeRegister(5);
+            gets(contrasenia);
+
+            longitud = calcLong(contrasenia);
+            
+            if(longitud >= 6){ bandContrasenia = 1; }
+        }while(bandContrasenia == 0 || longitud < 6);
+    }
+
+    validacionContrasenia = validarContrasenia(contrasenia, longitud);
+
+    if(validacionContrasenia == 0){
+        do{
+            menuDeRegister(6);
+
+            _flushall();
+            gets(contrasenia);
+
+            longitud = calcLong(contrasenia);
+
+            validacionContrasenia = validarContrasenia(contrasenia, longitud);
+
+        }while(validacionContrasenia == 0);  
+    }
+
+    contraseniaValida(1);
 }
 
 int validarNombreUsuarioNormal(char nombreUsuario[10]){
@@ -107,7 +110,7 @@ int validarUnicidadNormal(char nombreUsuario[10]){
     return accept;
 }
 
-int validarComienzoEnMinusculaNormal(char nombreUsuario[10]){
+int validarComienzoEnMinuscula(char nombreUsuario[10]){
     // aqui valido si comienza en miniscula
 
     int accept = 0;
@@ -118,11 +121,11 @@ int validarComienzoEnMinusculaNormal(char nombreUsuario[10]){
     if(comienzaMinuscula == 1){ accept = 1; };
     
     if(accept = 0)
-    { printf("\n\nEl error esta en que el usuario empieza con minuscula.\n\n"); }
+    { erroresRegister(1); }
     return accept;
 }
 
-int validarMayusculaNormal(char nombreUsuario[10]){
+int validarMayuscula(char nombreUsuario[10]){
     // buscamos al menos 2 mayusculas
     int accept = 0;
     int contador = 0;
@@ -135,12 +138,12 @@ int validarMayusculaNormal(char nombreUsuario[10]){
     if(contador >= 2){ accept = 1; }
 
     if(accept = 0)
-    { printf("\n\nEl error esta en que el usuario no tiene al menos 2 Mayusculas.\n\n"); }
+    { erroresRegister(2); }
 
     return accept; 
 }
 
-int validarMinimoNormal(char nombreUsuario[10]){
+int validarMinimo(char nombreUsuario[10]){
     // buscamos que el minimo sean 3 caracteres
     int accept = 0;
     int count;
@@ -153,12 +156,12 @@ int validarMinimoNormal(char nombreUsuario[10]){
     }
 
     if(accept = 0)
-    { printf("\n\nEl error esta en que el nombre de Usuario es muy corto..\n\n"); }
+    { erroresRegister(3); }
 
     return accept;
 }
 
-int validarContraseniaUsuarioNormal(char contrasenia[32], int longitudContra){
+int validarContrasenia(char contrasenia[32], int longitudContra){
     int validacionTriple = 0;
     int caracterAlfanumerico = 0;
     int caractNumConsecut = 0;
@@ -189,7 +192,7 @@ int validTriple(char contrasenia[32], int longitudContra){
 
     if(num >= 1 && min >= 1 && mayus >= 1){ accept = 1; }
 
-    if(accept = 0) { printf("\n\nEl error esta en que hace falta un numero/mayuscula/miniscula \n\n "); }
+    if(accept = 0) { erroresRegister(4); }
     return accept;
 }
 
@@ -215,7 +218,7 @@ int caractAlfa(char contrasenia[32], int longitudContra){
 
     if(totalWords == 0){ accept = 1; }
 
-    if(accept = 0) { printf("\n\nEl error es que se encontraron caracteres que no son alfanumericos. \n\n "); }
+    if(accept = 0) { erroresRegister(5); }
     return accept;
 }
 
@@ -245,9 +248,11 @@ int caracterConsecNum(char contrasenia[32], int longitudContra){
         }
     }
 
-    if(consecutivos == 1){ accept = 1; }
+    if(consecutivos == 1){ 
+        accept = 1; 
+        erroresRegister(6);
+    }
 
-    printf("\n\nExisten al menos 3 caracteres numericos consecutivos. ");
     return accept; 
 }
 
@@ -275,4 +280,122 @@ int consecutivAlfab(char contrasenia[32], int longitudContra){
         if(seguidos >= 1){ accept = 1; }
 
         return accept;
+}
+
+/*
+
+    ## --- Generar cuenta de Entrenador --- ##
+
+*/
+
+void generarCuentaEntrenador(){
+    int validacionNombreUser = 0;
+    int validacionContrasenia = 0;
+    int longitud = 0;
+    int bandContrasenia;
+
+    char nombreUsuario[10]
+    char contrasenia[32];
+
+    menuDeRegister(2);
+
+    _flushall();
+    gets(nombreUsuario);
+
+    validacionNombreUser = validarNombreUsuarioEntrenador(nombreUsuario);
+
+    if(validacionNombreUser == 0){
+        do{
+            menuDeRegister(3);
+            _flushall();
+            gets(nombreUsuario);
+
+            validacionNombreUser = validarNombreUsuarioEntrenador(nombreUsuario);
+        }while(validacionNombreUser == 0);
+    }
+
+    menuDeRegister(4);
+
+    _flushall();
+    gets(contrasenia);
+
+    longitud = calcLong(contrasenia);
+
+    if(longitud < 6){
+        do{
+            menuDeRegister(5);
+            gets(contrasenia);
+
+            longitud = calcLong(contrasenia);
+            
+            if(longitud >= 6){ bandContrasenia = 1; }
+        }while(bandContrasenia == 0 || longitud < 6);
+    }
+
+    validacionContrasenia = validarContrasenia(contrasenia, longitud);
+
+    if(validacionContrasenia == 0){
+        do{
+            menuDeRegister(6);
+            _flushall();
+            gets(contrasenia);
+
+            longitud = calcLong(contrasenia);
+
+            validacionContrasenia = validarContrasenia(contrasenia, longitud);
+
+        }while(validacionContrasenia == 0);  
+    }
+
+    contraseniaValida(2);
+}
+
+int validarNombreUsuarioEntrenador(char nombreUsuario[10]){
+    int validacion = 0;
+    int unicidad = 0;
+    int minuscula = 0;
+    int mayuscula = 0;
+    int minimo = 0;
+    
+
+    // Aqui hacemos una nueva función...
+
+    unicidad = validarUnicidadEntrenador(nombreUsuario);
+
+    // Estos 3 reutilizamos las funciones...
+    minuscula = validarComienzoEnMinusculaNormal(nombreUsuario);
+    mayuscula = validarMayusculaNormal(nombreUsuario);
+    minimo = validarMinimoNormal(nombreUsuario);
+
+    // Para que deje crear todos los accept tienen que ser 1
+
+    if(unicidad == 1 && minuscula == 1 && mayuscula == 1 && minimo == 1)
+    {  validacion = 1; }
+
+    return validacion;
+}
+
+int validarUnicidadEntrenador(char nombreUsuario[10]){
+    // aqui se debe validar si es el unico nombre de usuario en entrenadores.dat
+    // para esto aplicare una busqueda comparando strings
+
+    int accept = 0;
+    int bandera = 0;
+    int comparacion = 1000;
+    user comparingUser;
+
+    rewind(usuarios);
+
+    fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+    while(!feof(usuarios) && bandera == 0){
+
+        comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
+
+        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        if(comparacion == 0){ bandera = 1; }
+    }
+
+    if(comparacion == 0){ accept = 1; }
+
+    return accept;
 }
