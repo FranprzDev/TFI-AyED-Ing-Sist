@@ -4,9 +4,9 @@
 #include <time.h>
 #include <string.h>
 #include <windows.h>
-#include "../0. Librerias/menus.h"
-#include "../0. Librerias/register.h"
-#include "../0. Librerias/login.h"
+#include "menus.h"
+#include "register.h"
+#include "login.h"
 
 int main(void){
     /*
@@ -20,7 +20,7 @@ int main(void){
     entrenadores = fopen("../1. Archivos/Entrenadores.dat","a+b");
     
     /* 
-        Sección de Varaibles & Constantes
+        SecciÃ³n de Varaibles & Constantes
     */
     int opc = 0;
     int banderaCerrado = 1;
@@ -34,7 +34,7 @@ int main(void){
     char contraseniaValidada[32];
 
     /*
-        Seccción de Código
+        SeccciÃ³n de CÃ³digo
     */
     do{
         system("cls");
@@ -73,7 +73,7 @@ int main(void){
                     case 2:
 
                     case 3:
-                    // salir al menú principal
+                    // salir al menÃº principal
                     break;
                 }
             break;
@@ -87,7 +87,7 @@ int main(void){
                         // Listado de Socios - Desarrollo de actividad
                         /*
                             Aca depende mucho como quieran programarlo, si es que realmente
-                            lo quieren hacer un vector o qsy, por ahí la pueden mandar...
+                            lo quieren hacer un vector o qsy, por ahÃ­ la pueden mandar...
                             + facil 1 swtich con 1 listado de socios y 2 actividad y listo
                         */
                     break;
@@ -102,12 +102,12 @@ int main(void){
 
                             Puedo crear una funcion cerrar() { exit(1) } pero tenemos que fijarnos
                             bien que onda con cuales son los archivos que tenemos para cerrarlos bien, porque
-                            si no vamos a tener problemas después.
+                            si no vamos a tener problemas despuÃ©s.
 
-                            La otra es trabajar cerrandole la bandera común . pero eso indica que trabajaremos
-                            con 1 archivo abierto 1 sola vez durante todo el programa y así será (sin toqueteos raros)
+                            La otra es trabajar cerrandole la bandera comÃºn . pero eso indica que trabajaremos
+                            con 1 archivo abierto 1 sola vez durante todo el programa y asÃ­ serÃ¡ (sin toqueteos raros)
 
-                            Aquí se utiliza la idea de no toquetear de forma rara.
+                            AquÃ­ se utiliza la idea de no toquetear de forma rara.
                         */ 
                     break;
                     case 10:
