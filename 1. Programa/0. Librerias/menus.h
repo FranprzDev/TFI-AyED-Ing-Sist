@@ -130,13 +130,11 @@ void menuDeRegister(int opc){
     switch(opc){
         case 1:
                 system("cls");
-                Sleep(1000);
                 printf("----- CUENTA NORMAL -----\n");
                 printf("Ingrese su nombre de Usuario: ");
             break;
         case 2:
                 system("cls");
-                Sleep(1000);
                 printf("----- CUENTA ENTRENADOR -----\n");
                 printf("Ingrese su nombre de Usuario: ");
             break;

@@ -4,8 +4,9 @@
 #include <time.h>
 #include <string.h>
 #include <windows.h>
-#include "../0. Librerias/funcRegister.h"
 #include "../0. Librerias/menus.h"
+#include "../0. Librerias/register.h"
+#include "../0. Librerias/login.h"
 
 int main(void){
     /*
@@ -29,10 +30,12 @@ int main(void){
     int opcIngreso = 0;
     int typeOfUser = 0;
 
+    char nombreValidado[10];
+    char contraseniaValidada[32];
+
     /*
         Seccción de Código
     */
-
     do{
         system("cls");
 
