@@ -5,17 +5,6 @@
 #include <string.h>
 #include <windows.h>
 
-// estructura de usuario
-struct user{
-    char nombreUsuario[10];
-    char contrasenia[32];
-    int typeAccount;
-    // TypeAccount: 
-    // 1 - Usuario Normal 
-    // 2 - Entrenador
-};
-
-
 // ### funciones previas al login
 
 int validarUsuarioNormal(char nombreUser[10], char contrasenia[32], FILE *usuarios){
@@ -29,7 +18,7 @@ int validarUsuarioNormal(char nombreUser[10], char contrasenia[32], FILE *usuari
     fwrite(&usuarioNormal, sizeof(usuarioNormal),1, usuarios);
 
     while(!feof(usuarios) && bandera == 0){
-        if(strcmp(usuarioNormal.nombreUsuario,nombreUser == 0)){
+        if((strcmp(usuarioNormal.nombreUsuario,nombreUser) == 0) ){
             encontramosUsuario = 1;
             // se encontro el nombre de usuario
             // probamos con la contrasenia
@@ -58,10 +47,10 @@ int logearUsuario(FILE *usuarios, char nombreValidado[10], char contraseniaValid
     _flushall();
     gets(contrasenia);
 
-    accept = validarUsuarioNormal(nombreUsuario, contrasenia, usuarios) 
+    accept = validarUsuarioNormal(nombreUsuario, contrasenia, usuarios);
 
     strcpy(nombreValidado,nombreUsuario);
-    strcpy(contraseniaValidada,contrasenia)
+    strcpy(contraseniaValidada,contrasenia);
 
     return accept;
 }
@@ -80,10 +69,10 @@ int loguearEntrenador(FILE *entrenadores, char nombreValidado[10], char contrase
     _flushall();
     gets(contrasenia);
 
-    accept = validarUsuarioEntrenador(nombreUsuario, contrasenia, entrenadores) 
+    accept = validarUsuarioEntrenador(nombreUsuario, contrasenia, entrenadores);
 
     strcpy(nombreValidado,nombreUsuario);
-    strcpy(contraseniaValidada,contrasenia)
+    strcpy(contraseniaValidada,contrasenia);
 
     return accept;
 }
@@ -94,12 +83,12 @@ int validarUsuarioEntrenador(char nombreUser[10], char contrasenia[32], FILE *en
     struct user usuarioNormal;
     int encontramosUsuario = 0;
     
-    rewind(usuarios);
+    rewind(entrenadores);
 
     fwrite(&usuarioNormal, sizeof(usuarioNormal),1, entrenadores);
 
-    while(!feof(usuarios) && bandera == 0){
-        if(strcmp(usuarioNormal.nombreUsuario,nombreUser == 0)){
+    while(!feof(entrenadores) && bandera == 0){
+        if((strcmp(usuarioNormal.nombreUsuario,nombreUser) == 0)){
             encontramosUsuario = 1;
             // se encontro el nombre de usuario
             // probamos con la contrasenia
@@ -123,7 +112,7 @@ void loguearUserEnDB(FILE *usuarios, FILE *entrenadores, int opc, char nombreVal
     switch(opc){
         case 1:
             printf("\nLogearas un USUARIO \n");
-            accept = logearUsuario(FILE *usuarios, nombreValidado, contraseniaValidada);
+            accept = logearUsuario(usuarios, nombreValidado, contraseniaValidada);
 
             if(accept = 1){ printf("\nSe logeo correctamente... \n"); }
             else{ printf("\nHubo un error en el login. Intentelo de nuevo \n"); }
@@ -131,7 +120,7 @@ void loguearUserEnDB(FILE *usuarios, FILE *entrenadores, int opc, char nombreVal
             break;
         case 2:
             printf("\nLogearas un Entrenador \n");
-            accept = loguearEntrenador(FILE *entrenadores, nombreValidado, contraseniaValidada);
+            accept = loguearEntrenador(entrenadores, nombreValidado, contraseniaValidada);
 
             if(accept = 1){ printf("\nSe logeo correctamente... \n"); }
             else{ printf("\nHubo un error en el login. Intentelo de nuevo \n"); }

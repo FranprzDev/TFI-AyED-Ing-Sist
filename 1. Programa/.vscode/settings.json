@@ -4,6 +4,7 @@
         "stdio.h": "c",
         "menus.h": "c",
         "funcregister.h": "c",
-        "windows.h": "c"
+        "windows.h": "c",
+        "register.h": "c"
     }
 }

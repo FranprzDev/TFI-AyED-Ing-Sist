@@ -4,6 +4,8 @@
 #include <time.h>
 #include <string.h>
 #include <windows.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 struct user{
     char nombreUsuario[10];
@@ -39,7 +41,8 @@ int validarUnicidadNormal(char nombreUsuario[10], FILE *usuarios){
     return accept;
 }
 
-int validarComienzoEnMinuscula(char nombreUsuario[10]){
+
+int validarCom(char nombreUsuario[10]){
     // aqui valido si comienza en miniscula
 
     int accept = 0;
@@ -49,8 +52,9 @@ int validarComienzoEnMinuscula(char nombreUsuario[10]){
 
     if(comienzaMinuscula == 1){ accept = 1; };
     
-    if(accept = 0)
-    { erroresRegister(1); }
+    if(accept == 0)
+    { printf("\n\nEl error esta en que el usuario empieza con minuscula.\n\n"); }
+  
     return accept;
 }
 
@@ -58,7 +62,8 @@ int validarMayuscula(char nombreUsuario[10]){
     // buscamos al menos 2 mayusculas
     int accept = 0;
     int contador = 0;
-    for(int i = 0; i < 10; i++){
+    int i = 0;
+    for( i = 0; i < 10; i++){
         if(nombreUsuario[i] >= 'A' && nombreUsuario[i] <= 'Z'){
             contador++;
         }
@@ -66,8 +71,8 @@ int validarMayuscula(char nombreUsuario[10]){
 
     if(contador >= 2){ accept = 1; }
 
-    if(accept = 0)
-    { erroresRegister(2); }
+    if(accept == 0)
+    { printf("\n\nEl error esta en que el usuario no tiene al menos 2 Mayusculas.\n\n"); }
 
     return accept; 
 }
@@ -76,16 +81,21 @@ int validarMinimo(char nombreUsuario[10]){
     // buscamos que el minimo sean 3 caracteres
     int accept = 0;
     int count;
+	int i;
+	int comparacion;
+	
+	for(i = 0; i < 10; i++){
+		if(nombreUsuario[i] >= 0 && nombreUsuario[i] <= 9){ count++; }
+	
+		if(count >= 3){ 
+			i = 10; 
+			accept = 1;
+		}
+		
+	}	
 
-    for(int i = 0; i < 10; i++)
-    { if(nombreUsuario[i] != '\0') count++; }
-
-    if(count >= 3) {
-        accept = 1;
-    }
-
-    if(accept = 0)
-    { erroresRegister(3); }
+    if(accept == 0)
+    { printf("\n\nEl error esta en que el nombre de Usuario es muy corto..\n\n"); }
 
     return accept;
 }
@@ -101,21 +111,19 @@ int validarNombreUsuarioNormal(char nombreUsuario[10], FILE *usuarios){
     // esta es la unicidad común para el normal
 
     //unicidad = validarUnicidadNormal(nombreUsuario, usuarios);
-
+	
+	unicidad = 1;
     // Estos son los mismos para entrenadores y normales
-    minuscula = validarComienzoEnMinuscula(nombreUsuario);
+    minuscula = validarCom(nombreUsuario);
     mayuscula = validarMayuscula(nombreUsuario);
     minimo = validarMinimo(nombreUsuario);
 
     // Para que deje crear todos los accept tienen que ser 1
 
-    
-    printf("\nMinusc %d, Mayusc %d, Minim %d \n", minuscula, mayuscula, minimo);
-
 
     if(unicidad == 1 && minuscula == 1 && mayuscula == 1 && minimo == 1)
     {  validacion = 1; }
-    system("pause");
+    
     return validacion;
 }
 
@@ -157,7 +165,7 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     unicidad = validarUnicidadEntrenador(nombreUsuario, entrenadores);
 
     // Estos 3 reutilizamos las funciones...
-    minuscula = validarComienzoEnMinuscula(nombreUsuario);
+    minuscula = validarCom(nombreUsuario);
     mayuscula = validarMayuscula(nombreUsuario);
     minimo = validarMinimo(nombreUsuario);
 
@@ -175,25 +183,27 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     ################################ VALIDACIÓN DE CONTRASENIA ########################
 */
 
-int validTriple(char contrasenia[32], int longitudContra){
-    int accept = 0;
-    // 1 mayus 1 min 1 numero
-    int mayus = 0, min = 0, num = 0;
+int validTriple(char contrasenia[32], int longitudContra) {
+    bool num_exists = false;
+    bool upper_exists = false;
+    bool lower_exists = false;
 
-    for(int i = 0; i < longitudContra; i++){
-        if(contrasenia[i] >= 0 && contrasenia[i] <= 9){ num++; }
-        if(contrasenia[i] >= 'a' && contrasenia[i] <= 'z'){ min++; }
-        if(contrasenia[i] >= 'A' && contrasenia[i] <= 'Z'){ mayus++; }
-
-        if(num >= 1 && min >= 1 && mayus >= 1){
-            i = longitudContra;
+    int i = 0;
+    for(i = 0; i < longitudContra; i++){
+        if (isdigit(contrasenia[i]) && !num_exists) {
+            num_exists = true;
+        } else if (isupper(contrasenia[i]) && !upper_exists) {
+            upper_exists = true;
+        } else if (islower(contrasenia[i]) && !lower_exists) {
+            lower_exists = true;
         }
-    }
 
-    if(num >= 1 && min >= 1 && mayus >= 1){ accept = 1; }
-
-    if(accept = 0) { erroresRegister(4); }
-    return accept;
+        if (num_exists && upper_exists && lower_exists) {
+            return 1;
+        }
+	}
+	
+    return 0;
 }
 
 int caractAlfa(char contrasenia[32], int longitudContra){
@@ -207,8 +217,9 @@ int caractAlfa(char contrasenia[32], int longitudContra){
     int encontreAlfanumerico = 0;
     int totalWords = 0;
     int accept = 0;
+    int i;
 
-    for(int i = 0; i < longitudContra; i++){
+    for(i = 0; i < longitudContra; i++){
         if(contrasenia[i] >= 48 && contrasenia[i] <= 57){ encontreAlfanumerico++; } 
         if(contrasenia[i] >= 65 && contrasenia[i] <= 90) { encontreAlfanumerico++; }
         if(contrasenia[i] >= 97 && contrasenia[i] <= 122) { encontreAlfanumerico++; }
@@ -218,7 +229,7 @@ int caractAlfa(char contrasenia[32], int longitudContra){
 
     if(totalWords == 0){ accept = 1; }
 
-    if(accept == 0) { erroresRegister(5); }
+    if(accept == 0) { printf("\n\nEl error es que se encontraron caracteres que no son alfanumericos. \n\n "); }
 
     return accept;
 }
@@ -229,8 +240,10 @@ int calcLong(char contrasenia[32])
 int caracterConsecNum(char contrasenia[32], int longitudContra){
     // de 48 a 57 es numerico
     int consecutivos = 0;
-    int accept = 0;
-    for(int i = 0; i < longitudContra-2; i++){
+    int accept = 1;
+    int i;
+    
+    for(i = 0; i < longitudContra-2; i++){
         if(contrasenia[i] >= 48 && contrasenia[i] <= 57){
             if(contrasenia[i+1] >= 48 && contrasenia[i+1] <= 57){
                 if(contrasenia[i+2] >= 48 && contrasenia[i+2] <= 57){
@@ -242,37 +255,40 @@ int caracterConsecNum(char contrasenia[32], int longitudContra){
     }
 
     if(consecutivos == 1){ 
-        accept = 1; 
-        erroresRegister(6);
+        accept = 0; 
+        printf("\n\nExisten al menos 3 caracteres numericos consecutivos. ");
     }
 
     return accept; 
 }
 
+int is_consecutive(char a, char b) {
+    if (!isalpha(a) || !isalpha(b)) {
+        return 0;
+    }
+    return abs(tolower(a) - tolower(b)) == 1;
+}
+
 int consecutivAlfab(char contrasenia[32], int longitudContra){
     // letras consecutivas alfabeticamente.
-    int seguidos = 0;
-    int accept = 0;
+    int accept = 1;
+    char a;
+    char b;
+    int resultado = 0;
 
-    for(int i=0; i<longitudContra-1; i++){
-        if(contrasenia[i] >= 48 && contrasenia[i] <= 57){
-            // determino si es un numero...
-            if(contrasenia[i] == 48 && contrasenia[i+1] == 49){ seguidos++; }
-            if(contrasenia[i] == 49 && contrasenia[i+1] == 50){ seguidos++; }
-            if(contrasenia[i] == 50 && contrasenia[i+1] == 51){ seguidos++; }
-            if(contrasenia[i] == 51 && contrasenia[i+1] == 52){ seguidos++; }
-            if(contrasenia[i] == 52 && contrasenia[i+1] == 53){ seguidos++; }
-            if(contrasenia[i] == 53 && contrasenia[i+1] == 54){ seguidos++; }
-            if(contrasenia[i] == 54 && contrasenia[i+1] == 55){ seguidos++; }
-            if(contrasenia[i] == 55 && contrasenia[i+1] == 56){ seguidos++; }
-            if(contrasenia[i] == 55 && contrasenia[i+1] == 57){ seguidos++; }
-
-            if(seguidos >= 1){ i = longitudContra-1; }
-        }
-    }
-        if(seguidos >= 1){ accept = 1; }
-
-        return accept;
+    int i;
+    for(i = 0; i < 31; i++){
+    	
+    	a = contrasenia[i];
+    	b = contrasenia[i+1];
+    	
+    	resultado = is_consecutive(a,b);
+    	
+    	if(resultado == 1){accept = 0; i = 31;}
+	
+	}
+    	
+    return accept;
 }
 
 int validarContrasenia(char contrasenia[32], int longitudContra){
@@ -287,6 +303,10 @@ int validarContrasenia(char contrasenia[32], int longitudContra){
     consecutividadAlfabetica = consecutivAlfab(contrasenia, longitudContra);
 
     int accept = 0;
+    
+    printf("%d %d %d %d \n", validacionTriple, caracterAlfanumerico, caractNumConsecut, consecutividadAlfabetica);
+    
+    system("pause");
 
     if(validacionTriple == 1 && caracterAlfanumerico == 1 && caractNumConsecut == 1 && consecutividadAlfabetica == 1){
         accept = 1;
@@ -296,7 +316,10 @@ int validarContrasenia(char contrasenia[32], int longitudContra){
 }   
 
 void generarCuentaEnArchivoUsuario(FILE *usuarios, struct  user userWrite){
-        generacionCuentas(1);
+	
+        system("cls");
+        Sleep(1000);
+        printf("\n\nSe genero correctamente la cuenta del tipo USUARIO");
                 
         rewind(usuarios);
         fseek(usuarios, 0, SEEK_END);
@@ -306,7 +329,10 @@ void generarCuentaEnArchivoUsuario(FILE *usuarios, struct  user userWrite){
 }
 
 void generarCuentaEnArchivoEntrenadores(FILE *entrenadores, struct user userWrite){
-        generacionCuentas(2);
+	
+        system("cls");
+        Sleep(1000);
+        printf("\n\nSe genero correctamente la cuenta del tipo ENTRENADOR");
                 
         rewind(entrenadores);
         fseek(entrenadores, 0, SEEK_END);
@@ -328,7 +354,9 @@ void generarCuentaNormal(FILE *usuarios) {
 
     struct user normalAccount;
 
-    menuDeRegister(1);
+    system("cls");
+    printf("----- CUENTA NORMAL -----\n");
+    printf("Ingrese su nombre de Usuario: ");
 
     _flushall();
     gets(nombreUsuario);
@@ -337,7 +365,8 @@ void generarCuentaNormal(FILE *usuarios) {
 
     if(validacionNombreUser == 0){
         do{
-            menuDeRegister(3);
+            system("cls");
+            printf("Ingrese su nombre de Usuario: ");
 
             _flushall();
             gets(nombreUsuario);
@@ -346,19 +375,23 @@ void generarCuentaNormal(FILE *usuarios) {
         }while(validacionNombreUser == 0);
     }
 
-    menuDeRegister(4);
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\nIngrese la contrasenia: ");
 
-    // Copio la contrasenia validada al struct para luego guardar al archivo
+    // Copio el usuario validada al struct para luego guardar al archivo
     strcpy(normalAccount.nombreUsuario,nombreUsuario);
 
     _flushall();
     gets(contrasenia);
 
     longitud = calcLong(contrasenia);
+    
+    system("pause");
 
     if(longitud < 6){
         do{
-            menuDeRegister(5);
+            printf("\n\nLa longitud es muy corta, vuelve a ingresar la contrasenia \n\n");
+            printf("\nIngrese la contrasenia: ");
             gets(contrasenia);
 
             longitud = calcLong(contrasenia);
@@ -371,7 +404,8 @@ void generarCuentaNormal(FILE *usuarios) {
 
     if(validacionContrasenia == 0){
         do{
-            menuDeRegister(6);
+            system("cls");
+            printf("\nIngrese la contrasenia: ");
 
             _flushall();
             gets(contrasenia);
@@ -410,7 +444,9 @@ void generarCuentaEntrenador(FILE *entrenadores){
     char contrasenia[32];
 
     struct user entrenadorAccount;
-    menuDeRegister(2);
+    system("cls");
+    printf("----- CUENTA ENTRENADOR -----\n");
+    printf("Ingrese su nombre de Usuario: ");
 
     _flushall();
     gets(nombreUsuario);
@@ -419,7 +455,8 @@ void generarCuentaEntrenador(FILE *entrenadores){
 
     if(validacionNombreUser == 0){
         do{
-            menuDeRegister(3);
+            system("cls");
+            printf("Ingrese su nombre de Usuario: ");
             _flushall();
             gets(nombreUsuario);
 
@@ -427,7 +464,8 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionNombreUser == 0);
     }
 
-    menuDeRegister(4);
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
     strcpy(entrenadorAccount.nombreUsuario,nombreUsuario);
@@ -439,7 +477,8 @@ void generarCuentaEntrenador(FILE *entrenadores){
 
     if(longitud < 6){
         do{
-            menuDeRegister(5);
+            printf("\n\nLa longitud es muy corta, vuelve a ingresar la contrasenia \n\n");
+            printf("\nIngrese la contrasenia: ");
             gets(contrasenia);
 
             longitud = calcLong(contrasenia);
@@ -452,7 +491,8 @@ void generarCuentaEntrenador(FILE *entrenadores){
 
     if(validacionContrasenia == 0){
         do{
-            menuDeRegister(6);
+            system("cls");
+            printf("\nIngrese la contrasenia: ");
             _flushall();
             gets(contrasenia);
 
