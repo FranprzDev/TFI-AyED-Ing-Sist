@@ -9,12 +9,14 @@ int menuPrincipal(){
     printf("Bienvenido al Sistema 8teenGym");
 
     printf("\nDecide a que modulo del sistema quiere ingresar: ");
-    printf("\n(Para acceder a los modulos antes tienes que haberte registrado)");
+    printf("\n(Para acceder a los modulos antes necesitas tener una cuenta)");
+    printf("\nen el sistema. Para ello primero accede a la opcion 0)");
+    printf("\n(Luego segun tu cuenta y permisos podes usar los modulos)");
 
     printf("\n\n0. Registrarse/Iniciar Sesion.");
     printf("\n1. Modulo GYM (ENTRENADORES)");
-    printf("\n2. Modulo Recepcion (RECEPCIONISTAS)"); 
-    printf("\n3. Modulo Adminsitracion");
+    printf("\n2. Modulo Recepcion (ADMINISTRADOR)"); 
+    printf("\n3. Modulo Adminsitracion (ADMINISTRADORES)");
     printf("\n4. Cerrar el programa");
 
     printf("\nIngrese su opcion: ");
@@ -27,9 +29,8 @@ int menuGym(){
     int opc = 0;
     printf("--- SubMenu GYM ---\n");
     
-    printf("1. Visualizar listado de Socios y la actividad que desarrollan\n");
-    printf("2. Registrar rutinas de Gimnasia.\n");
-    printf("3. Cerrar la aplicacion\n");
+    printf("1.  Iniciar sesion como entrenador para mas opciones\n");
+    printf("2. Cerrar el programa\n");
     printf("10. VOLVER ATRAS\n");
 
     printf("\nIngrese su opcion: ");
@@ -59,7 +60,7 @@ int menuAdmin(){
     int opc = 0;
     printf("--- SubMenu Administracion ---\n");
     
-    printf("1. Registrar usuario de RecepciÃ³n\n");
+    printf("1. Registrar usuario de Recepcion\n");
     printf("2. Registrar actividades del Gym\n");
     printf("3. Calcular pago del entrenador\n");
     printf("4. Entrenador con mayor carga horaria\n");
@@ -77,11 +78,10 @@ int ingresar(){
     int inittial = 0;
     system("cls");
 
-    Sleep(1000);
+    Sleep(500);
 
     printf("Elige una opcion: \n");
-    printf("\n1. Registrar un Usuario");
-    printf("\n2. Iniciar Sesion");
+    printf("\n1. Registrar un Usuario (ADMIN/ENTRENADOR)");
     printf("\n10. Volver atras ");
     
     printf("\nSu opcion es: ");
@@ -94,10 +94,10 @@ int typeUser(){
     int type = 0;
     system("cls");
 
-    Sleep(1000);
+    Sleep(500);
 
     printf("Elige una opcion: \n");
-    printf("\n1. Usuario NORMAL");
+    printf("\n1. Usuario ADMINISTRADOR");
     printf("\n2. Usuario ENTRENADOR");
 
     printf("\nSu opcion es: ");
@@ -109,14 +109,14 @@ int typeUser(){
 void contraseniaValida(int opc){
     switch(opc){
         case 1:
-            printf("\n\nÂ¡Tu Contrasenia es VALIDA!\n");
-            printf("\n\nÂ¡Generaremos tu Usuario de tipo NORMAL!\n");
+            printf("\n\n¡Tu Contrasenia es VALIDA!!!\n");
+            printf("\n\n¡Generaremos tu Usuario de tipo NORMAL!!1\n");
             printf("\nEspere...");
             Sleep(2000);
             break;
         case 2:
-            printf("\n\nÂ¡Tu Contrasenia es VALIDA!\n");
-            printf("\n\nÂ¡Generaremos tu Usuario de tipo ENTRENADOR!\n");
+            printf("\n\nTu Contrasenia es VALIDA!!!\n");
+            printf("\n\nGeneraremos tu Usuario de tipo ENTRENADOR!!!\n");
             printf("\nEspere...");
             Sleep(2000);
             break;
@@ -124,4 +124,30 @@ void contraseniaValida(int opc){
             printf("\nImposible acceder aqui...");
             break;
     }
+}
+
+void casoDiez(){
+
+    system("cls");
+    printf("\n\nVolviendo atras...");
+    printf("\n\n");
+    Sleep(1000);
+
+    system("cls");
+
+}
+
+void menuJoinGym(){
+    int opc = 0;
+    printf("--- SubMenu GYM ---\n");
+    
+    printf("1. Listar socios y la actividad que desarollan\n");
+    printf("2. Añadir rutina a un grupo específico.\n");
+    printf("3. Cerrar el programa\n");
+    printf("10. VOLVER ATRAS\n");
+
+    printf("\nIngrese su opcion: ");
+    scanf("%d", &opc);
+
+    return opc; 
 }
