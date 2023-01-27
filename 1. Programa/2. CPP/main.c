@@ -7,6 +7,32 @@
 #include "menus.h"
 #include "register.h"
 #include "login.h"
+#include "moduloGym.h"
+
+struct fecha{
+    int dia;
+    int mes; 
+    int anio;
+};
+
+struct socios{
+    int dni;
+    float altura;
+    float peso;
+    int nroSoc;
+    int grupoEspecifico; // 1 -> grupo 'a' 2 -> grupo 'b' 3 -> grupo 'c'
+    char apynom[60];
+    char domicilio[30];
+    char rutina[380];
+    fecha fechaNacimiento; // struct enlazado
+    // socios --> usuarios.dat
+};
+
+struct turnos{
+    int legajoEntrenador;
+    int nroSoc;
+    fecha fechaTurno;
+}; 
 
 int main(void){
     /*
@@ -29,9 +55,10 @@ int main(void){
     int opcSwitchAdministration = 0;
     int opcIngreso = 0;
     int typeOfUser = 0;
+    int inicioSesion = 0;
+    int opcSwitchJoinGym = 0;
 
     char nombreValidado[10];
-    char contraseniaValidada[32];
 
     /*
         SeccciÃ³n de CÃ³digo
@@ -54,26 +81,26 @@ int main(void){
 
                         switch(typeOfUser){
                             case 1:
-                                printf("\n\nEl tipo de usuario que eligio es NORMAL \n");
+                                printf("\n\nEl tipo de usuario que eligio es ADMINISTRADOR \n");
                                 printf("Crearemos una cuenta del tipo normal. \n");
 
-                                generarCuentaNormal(usuarios);
+                                generarCuentaAdministrador(entrenadores);
                                 break;
                             case 2:
                                 printf("\n\nEl tipo de usuario que eligio es ENTRENADOR \n");  
                                 printf("Crearemos una cuenta del tipo entrenador. \n");
 
-            
                                 generarCuentaEntrenador(entrenadores);
+
+                                // IMPORTANTE RECALCAR: SE GUARDAN EN ENTRENADORES.DAT
+                                // SON USUARIOS CON TYPE.
                                 break;    
                             default:
                                 printf("Eligio un tipo de usuario incorrecto.");
                                 break;                        
                         }
-                    case 2:
-
-                    case 3:
-                    // salir al menÃº principal
+                    case 10:
+                        casoDiezo();
                     break;
                 }
             break;
@@ -82,40 +109,37 @@ int main(void){
                 opcSwitchGym = menuGym();
 
                 switch(opcSwitchGym){
-                    break;
                     case 1:
-                        // Listado de Socios - Desarrollo de actividad
-                        /*
-                            Aca depende mucho como quieran programarlo, si es que realmente
-                            lo quieren hacer un vector o qsy, por ahÃ­ la pueden mandar...
-                            + facil 1 swtich con 1 listado de socios y 2 actividad y listo
-                        */
+                            do{
+                                inicioSesion = loguearEntrenadorEnDB(entrenadores, nombreValidado);
+                                system("cls");
+                            }while(inicioSesion == 0);
+
+                            opcSwitchJoinGym = menuJoinGym();
+
+                            switch(opcSwitchJoinGym){
+                                case 1:
+
+                                break;
+                                case 2:
+
+                                break;
+                                case 3:
+                                    printf("\n\nOk. Cerraremos el Programa.");
+                                break;
+                                case 10:
+                                    casoDiez();
+                                break;
+                                default:
+                                    printf(" \n\nPusiste una opcion que no corresponde, cerrando \n\n");
+                                break;
+                            }
                     break;
                     case 2:
-                        // registrarRutina_GYM();
-                    break;
-                    case 3:
                         printf("\n\nOk. Cerraremos el Programa.");
-                        /* 
-                            aca estos cierres de aplicacion lo podemos trabajar de 2 formas:
-                            depende como lo quieran trabajar usteeds lo hacemos ...
-
-                            Puedo crear una funcion cerrar() { exit(1) } pero tenemos que fijarnos
-                            bien que onda con cuales son los archivos que tenemos para cerrarlos bien, porque
-                            si no vamos a tener problemas despuÃ©s.
-
-                            La otra es trabajar cerrandole la bandera comÃºn . pero eso indica que trabajaremos
-                            con 1 archivo abierto 1 sola vez durante todo el programa y asÃ­ serÃ¡ (sin toqueteos raros)
-
-                            AquÃ­ se utiliza la idea de no toquetear de forma rara.
-                        */ 
                     break;
                     case 10:
-                        printf("\n\nVolviendo atras...");
-                        printf("\n\n");
-                        Sleep(1000);
-
-                        system("cls");
+                        casoDiez();
                     break; 
                     default: 
                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
@@ -148,11 +172,7 @@ int main(void){
                         printf("\n\nOk. Cerraremos el Programa.");
                         banderaCerrado = 0;    
                     case 10:
-                        printf("\n\nVolviendo atras...");
-                        printf("\n\n");
-                        Sleep(1000);
-
-                        system("cls");
+                        casoDiez();
                     break; 
                     break;
                     default:
@@ -184,11 +204,7 @@ int main(void){
                         banderaCerrado = 0;    
                     break;
                     case 10:
-                        printf("\n\nVolviendo atras...");
-                        printf("\n\n");
-                        Sleep(1000);
-
-                        system("cls");
+                        casoDiez();
                     break; 
                     default:
                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");

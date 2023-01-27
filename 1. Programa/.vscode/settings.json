@@ -5,6 +5,9 @@
         "menus.h": "c",
         "funcregister.h": "c",
         "windows.h": "c",
-        "register.h": "c"
+        "register.h": "c",
+        "login.h": "c",
+        "string.h": "c",
+        "time.h": "c"
     }
 }

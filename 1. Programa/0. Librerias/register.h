@@ -7,38 +7,61 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-struct user{
+struct adminUser{
     char nombreUsuario[10];
     char contrasenia[32];
-    int typeAccount;
+    char apellidoNombre[60]; 
+    int legajoEntrenador;
+    int grupoEntrenador;
+    int typeAccount; 
     // TypeAccount: 
-    // 1 - Usuario Normal 
+    // 1 - Administrador 
     // 2 - Entrenador
 };
 
-int validarUnicidadNormal(char nombreUsuario[10], FILE *usuarios){
+int generarLegajo() {
+    srand(time(NULL)); 
+    return rand() % 99999 + 10000; 
+}
+
+int validarUnicidadAdmin(char nombreUsuario[10], FILE *entrenadores){
     // aqui se debe validar si es el unico nombre de usuario en usuarios.dat
     // para esto aplicare una busqueda comparando strings
 
     int accept = 0;
     int bandera = 0;
     int comparacion = 1000;
-    struct user comparingUser;
+    struct adminUser comparingUser;
+    
+    // Primero comparo si el archivo no es vacio, porque si no se bugea xd
 
-    rewind(usuarios);
+    rewind(entrenadores);
+    fseek(entrenadores, 0, SEEK_END);
+    int size = ftell(entrenadores);
 
-    fwrite(&comparingUser, sizeof(comparingUser), 1, usuarios);
-    while(!feof(usuarios) && bandera == 0){
+    if(size == 0){
+        accept = 1;
+    }else{
+        rewind(usuarios);
 
-        comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
+        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        while(!feof(entrenadores) && bandera == 0){
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, usuarios);
-        if(comparacion == 0){ bandera = 1; }
+            comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
+
+            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            if(comparacion == 0){ bandera = 1; }
+        }
+
+        if(comparacion == 0){ accept = 1; }
     }
 
-    if(comparacion == 0){ accept = 1; }
-
     return accept;
+
+    // hay que reconocer que si generamos 2 habria un problema
+    // es decir que exista un usuario generado como ADMIN y otro como ENTRENADOR
+    // no lo admitiria a pesar de que son distinto tipo.
+    // igual no tendria que tirar ningun tipo de error ni nada por el estilo. (teoricamente)
 }
 
 
@@ -100,7 +123,7 @@ int validarMinimo(char nombreUsuario[10]){
     return accept;
 }
 
-int validarNombreUsuarioNormal(char nombreUsuario[10], FILE *usuarios){
+int validarNombreUsuarioAdmin(char nombreUsuario[10], FILE *entrenadores){
     int validacion = 0;
     int unicidad = 0;
     int minuscula = 0;
@@ -108,12 +131,11 @@ int validarNombreUsuarioNormal(char nombreUsuario[10], FILE *usuarios){
     int minimo = 0;
     
 
-    // esta es la unicidad común para el normal
+    // esta es la unicidad común para el administrador
 
-    //unicidad = validarUnicidadNormal(nombreUsuario, usuarios);
-	
-	unicidad = 1;
-    // Estos son los mismos para entrenadores y normales
+    unicidad = validarUnicidadAdmin(nombreUsuario, entrenadores);
+
+    // Estos son los mismos para entrenadores y administradores
     minuscula = validarCom(nombreUsuario);
     mayuscula = validarMayuscula(nombreUsuario);
     minimo = validarMinimo(nombreUsuario);
@@ -134,20 +156,29 @@ int validarUnicidadEntrenador(char nombreUsuario[10], FILE *entrenadores){
     int accept = 0;
     int bandera = 0;
     int comparacion = 1000;
-    struct user comparingUser;
+    struct adminUser comparingUser;
 
     rewind(entrenadores);
+    fseek(entrenadores,0,SEEK_END);
 
-    fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
-    while(!feof(entrenadores) && bandera == 0){
+    int size = ftell(entrenadores);
 
-        comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
+    if(size == 0){
+        accept = 1;
+    }else{
+        rewind(entrenadores);
 
         fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
-        if(comparacion == 0){ bandera = 1; }
-    }
+        while(!feof(entrenadores) && bandera == 0){
 
-    if(comparacion == 0){ accept = 1; }
+            comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
+
+            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            if(comparacion == 0){ bandera = 1; }
+        }
+
+        if(comparacion == 0){ accept = 1; }
+    }
 
     return accept;
 }
@@ -315,35 +346,31 @@ int validarContrasenia(char contrasenia[32], int longitudContra){
     return accept;
 }   
 
-void generarCuentaEnArchivoUsuario(FILE *usuarios, struct  user userWrite){
+void generarCuentaEnEntrenadores(FILE *entrenadores, struct user userWrite, int opc){
 	
-        system("cls");
-        Sleep(1000);
-        printf("\n\nSe genero correctamente la cuenta del tipo USUARIO");
-                
-        rewind(usuarios);
-        fseek(usuarios, 0, SEEK_END);
-
-        fwrite(&userWrite, sizeof(userWrite), 1, usuarios);
-           
-}
-
-void generarCuentaEnArchivoEntrenadores(FILE *entrenadores, struct user userWrite){
-	
-        system("cls");
-        Sleep(1000);
-        printf("\n\nSe genero correctamente la cuenta del tipo ENTRENADOR");
+        switch(opc){
+            case 1:
+                system("cls");
+                Sleep(1000);
+                printf("\n\nSe genero correctamente la cuenta del tipo ADMIN");
+            break;
+            case 2:
+                system("cls");
+                Sleep(1000);
+                printf("\n\nSe genero correctamente la cuenta del tipo ENTRENADOR");
+            break;
+        }
                 
         rewind(entrenadores);
         fseek(entrenadores, 0, SEEK_END);
 
-        fwrite(&userWrite, sizeof(userWrite), 1, entrenadores);
+        fwrite(&userWrite, sizeof(adminUser), 1, entrenadores);
            
 }
 
 // #Generar cuenta normal
 
-void generarCuentaNormal(FILE *usuarios) {
+void generarCuentaAdministrador(FILE *entrenadores) {
     int validacionNombreUser = 0;
     int validacionContrasenia = 0;
     int longitud = 0;
@@ -351,17 +378,18 @@ void generarCuentaNormal(FILE *usuarios) {
 
     char nombreUsuario[10];
     char contrasenia[32];
+    char apellidoynombre[60];
 
-    struct user normalAccount;
+    struct adminUser account;
 
     system("cls");
-    printf("----- CUENTA NORMAL -----\n");
+    printf("----- CUENTA ADMINISTRADOR -----\n");
     printf("Ingrese su nombre de Usuario: ");
 
     _flushall();
     gets(nombreUsuario);
 
-    validacionNombreUser = validarNombreUsuarioNormal(nombreUsuario, usuarios);
+    validacionNombreUser = validarNombreUsuarioAdmin(nombreUsuario, entrenadores);
 
     if(validacionNombreUser == 0){
         do{
@@ -371,7 +399,7 @@ void generarCuentaNormal(FILE *usuarios) {
             _flushall();
             gets(nombreUsuario);
 
-            validacionNombreUser = validarNombreUsuarioNormal(nombreUsuario, usuarios);
+            validacionNombreUser = validarNombreUsuarioAdmin(nombreUsuario, entrenadores);
         }while(validacionNombreUser == 0);
     }
 
@@ -379,7 +407,7 @@ void generarCuentaNormal(FILE *usuarios) {
     printf("\nIngrese la contrasenia: ");
 
     // Copio el usuario validada al struct para luego guardar al archivo
-    strcpy(normalAccount.nombreUsuario,nombreUsuario);
+    strcpy(account.nombreUsuario,nombreUsuario);
 
     _flushall();
     gets(contrasenia);
@@ -420,12 +448,20 @@ void generarCuentaNormal(FILE *usuarios) {
     contraseniaValida(1);
 
     // Copio la contrasenia validada al struct para luego guardar al archivo
-    strcpy(normalAccount.contrasenia,contrasenia);
+    strcpy(account.contrasenia,contrasenia);
 
     // Decido el tipo de usuario para esta cuenta.
-    normalAccount.typeAccount = 1;
+    account.typeAccount = 1;
 
-    generarCuentaEnArchivoUsuario(usuarios, normalAccount);
+    printf("\n\nIngrese su Apellido y nombre: ");
+    gets(apellidoynombre);
+
+    strcpy(account.apellidoynombre,apellidoynombre);
+
+    generarCuentaEnEntrenadores(entrenadores, account, 1);
+
+    printf("\n\n");
+    system("pause");
     system("cls");
 
     // Aquí se terimno esto, entonces se vuelve a la función principal donde se puede generar uno nuevo
@@ -438,12 +474,13 @@ void generarCuentaEntrenador(FILE *entrenadores){
     int validacionNombreUser = 0;
     int validacionContrasenia = 0;
     int longitud = 0;
-    int bandContrasenia;
+    int bandContrasenia = 0;
+    int legajo = 0;
 
     char nombreUsuario[10];
     char contrasenia[32];
 
-    struct user entrenadorAccount;
+    struct adminUser account;
     system("cls");
     printf("----- CUENTA ENTRENADOR -----\n");
     printf("Ingrese su nombre de Usuario: ");
@@ -468,7 +505,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
     printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
-    strcpy(entrenadorAccount.nombreUsuario,nombreUsuario);
+    strcpy(account.nombreUsuario,nombreUsuario);
 
     _flushall();
     gets(contrasenia);
@@ -504,10 +541,20 @@ void generarCuentaEntrenador(FILE *entrenadores){
     }
 
     contraseniaValida(2);
-    strcpy(entrenadorAccount.contrasenia, contrasenia);
-    entrenadorAccount.typeAccount = 2;
+    strcpy(account.contrasenia, contrasenia);
+    account.typeAccount = 2;
 
-    generarCuentaEnArchivoEntrenadores(entrenadores, entrenadorAccount);
+    printf("\n\nIngrese su Apellido y Nombre: ");
+    gets(apellidoynombre);
+
+    strcpy(account.apellidoynombre,apellidoynombre);
+
+    // Dar legajo a entrenador.
+    legajo = generarLegajo();
+
+    account.legajoEntrenador = legajo;
+
+    generarCuentaEnEntrenadores(entrenadores, account, 2);
     system("cls");
 
     // Aquí se terimno esto, entonces se vuelve a la función principal donde se puede generar uno nuevo
