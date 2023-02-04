@@ -100,7 +100,7 @@ int main(void){
                                 break;                        
                         }
                     case 10:
-                        casoDiezo();
+                        casoDiez();
                     break;
                 }
             break;

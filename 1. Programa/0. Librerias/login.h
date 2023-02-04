@@ -10,7 +10,7 @@
 int validarUsuarioNormal(char nombreUser[10], char contrasenia[32], FILE *usuarios){
     // busco el archivo con coincidencias - 1 lo encontre 0 no lo encontre
     int bandera = 0;
-    struct user usuarioNormal;
+    struct adminUser usuarioNormal;
     int encontramosUsuario = 0;
     
     rewind(usuarios);

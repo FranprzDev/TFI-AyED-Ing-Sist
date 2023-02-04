@@ -137,7 +137,7 @@ void casoDiez(){
 
 }
 
-void menuJoinGym(){
+int menuJoinGym(){
     int opc = 0;
     printf("--- SubMenu GYM ---\n");
     

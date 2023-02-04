@@ -64,7 +64,7 @@ int loguearEntrenadorEnDB(FILE *entrenadores, char nombreValidado[10]){
 
     Sleep(200);
     printf("\nLogearas un Entrenador \n");
-    accept = loguearEntrenador(entrenadores, nombreValidado, contraseniaValidada);
+    accept = loguearEntrenador(entrenadores, nombreValidado);
 
     if(accept == 0){ printf("\nHubo un error en el login. Intentelo de nuevo \n"); }
 

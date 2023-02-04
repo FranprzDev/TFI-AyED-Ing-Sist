@@ -25,7 +25,7 @@ int generarLegajo() {
 }
 
 int validarUnicidadAdmin(char nombreUsuario[10], FILE *entrenadores){
-    // aqui se debe validar si es el unico nombre de usuario en usuarios.dat
+    // aqui se debe validar si es el unico nombre de usuario en entrenadores.dat
     // para esto aplicare una busqueda comparando strings
 
     int accept = 0;
@@ -42,14 +42,14 @@ int validarUnicidadAdmin(char nombreUsuario[10], FILE *entrenadores){
     if(size == 0){
         accept = 1;
     }else{
-        rewind(usuarios);
+        rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -168,12 +168,12 @@ int validarUnicidadEntrenador(char nombreUsuario[10], FILE *entrenadores){
     }else{
         rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -346,7 +346,7 @@ int validarContrasenia(char contrasenia[32], int longitudContra){
     return accept;
 }   
 
-void generarCuentaEnEntrenadores(FILE *entrenadores, struct user userWrite, int opc){
+void generarCuentaEnEntrenadores(FILE *entrenadores, adminUser userWrite, int opc){
 	
         switch(opc){
             case 1:
@@ -456,7 +456,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     printf("\n\nIngrese su Apellido y nombre: ");
     gets(apellidoynombre);
 
-    strcpy(account.apellidoynombre,apellidoynombre);
+    strcpy(account.apellidoNombre,apellidoynombre);
 
     generarCuentaEnEntrenadores(entrenadores, account, 1);
 
@@ -545,9 +545,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
     account.typeAccount = 2;
 
     printf("\n\nIngrese su Apellido y Nombre: ");
-    gets(apellidoynombre);
-
-    strcpy(account.apellidoynombre,apellidoynombre);
+    gets(account.apellidoNombre);
 
     // Dar legajo a entrenador.
     legajo = generarLegajo();
