@@ -26,13 +26,16 @@ int main(void){
 
     FILE *usuarios;
     FILE *entrenadores;
+    FILE *archSocios;
 
-    usuarios = fopen("../1. Archivos/Usuarios.dat","a+b");
-    entrenadores = fopen("../1. Archivos/Entrenadores.dat","a+b");
+    usuarios = fopen("Usuarios.dat","a+b");
+    entrenadores = fopen("Entrenadores.dat","a+b");
+    archSocios = fopen("Socios.dat","a+b");
     
     /* 
-        SecciÃƒÆ’Ã‚Â³n de Varaibles & Constantes
+        Seccion de vars y const
     */
+    
     int opc = 0;
     int banderaCerrado = 1;
     int opcSwitchGym = 0;
@@ -42,11 +45,14 @@ int main(void){
     int typeOfUser = 0;
     int inicioSesion = 0;
     int opcSwitchJoinGym = 0;
+    int opcionReception = 0;
+    int opcArchSoc = 0;
+    int nroSocio;
 
     char nombreValidado[10];
 
     /*
-        SeccciÃƒÆ’Ã‚Â³n de CÃƒÆ’Ã‚Â³digo
+        Secccion de codigo
     */
     do{
         system("cls");
@@ -96,7 +102,7 @@ int main(void){
                 switch(opcSwitchGym){
                     case 1:
                             do{
-                                inicioSesion = loguearAdminDb(entrenadores, nombreValidado);
+                                inicioSesion = loguearEntrenadorEnDB(entrenadores, nombreValidado); // loguearEntrenadorEnDb
                                 system("cls");
                             }while(inicioSesion == 0);
 
@@ -104,10 +110,10 @@ int main(void){
 
                             switch(opcSwitchJoinGym){
                                 case 1:
-
+                                    listadoSociosActividad(archSocios);
                                 break;
                                 case 2:
-
+                                    registrarRutina(archSocios);
                                 break;
                                 case 3:
                                     printf("\n\nOk. Cerraremos el Programa.");
@@ -141,11 +147,52 @@ int main(void){
                 switch(opcSwitchReception){
                     case 1:
                         do{
-                            inicioSesion = loguearAdminDb(entrenadores, nombreValidado);
+                            inicioSesion = loguearAdminsitradorDb(entrenadores, nombreValidado);
                             system("cls");
                         }while(inicioSesion == 0);
+                
+                        opcionReception = menuRecepcion();
 
-                        
+                        switch(opcionReception){
+                            case 1:
+                                registrarSocio(archSocios, nroSocio);
+
+                                system("cls");
+                                printf("\n1. Registrar una actividad en el socio");
+                                printf("\n2. Salir \n");
+                                printf("\n\nIngrese una opcion: ");
+
+                                scanf("%d", &opcArchSoc);
+
+                                switch(opcArchSoc){
+                                    case 1:
+                                        registrarActividadSocio(archSocios, nroSocio);
+
+                                        printf("\nSe registro la actividad del socio... \n");
+                                    break;
+                                    case 2:
+                                        printf("\n\nCerrando programa. \n\n");
+                                    break;
+                                    default:
+                                        printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
+                                        banderaCerrado = 0;
+                                }
+                            break;
+                            case 2:
+                                listarSocios(archSocios);
+                            break;
+                            case 3:
+                                listarFechaPagos(archSocios);
+                            break;
+                            case 4:
+                                printf("\n\nCerrando programa. \n\n");
+                            break;
+                            default:
+                                printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
+                                banderaCerrado = 0;
+                            break;
+                        }
+
                     break;
                     case 2:
                         printf("\n\nOk. Cerraremos el Programa.");
@@ -165,20 +212,13 @@ int main(void){
                 opcSwitchAdministration = menuAdmin();
 
                 switch(opcSwitchAdministration){
-                    break;
                     case 1:
-                        // registrarUsuario_Administration();
-                    break;
-                    case 2:
-                        // registrarActividades_Administration();
-                    break;
-                    case 3:
                         // calcularPagoEntrenador_Administration();
                     break;
-                    case 4:
+                    case 2:
                         // entrenadorMaxCargaHs_Administration();
                     break;
-                    case 5:
+                    case 3:
                         printf("\n\nOk. Cerraremos el Programa.");
                         banderaCerrado = 0;    
                     break;
@@ -202,6 +242,13 @@ int main(void){
         }
     }while(banderaCerrado == 1);
 
+    fclose(archSocios);
+    fclose(usuarios);
+    fclose(entrenadores);
     printf("\n");
+    system("cls");
+    
+
+    
 
 } // fin del main
