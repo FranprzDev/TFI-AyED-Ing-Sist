@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-
 int menuPrincipal(){
     int opc = 0;
     printf("--- Menu Principal ---\n");
@@ -37,6 +33,14 @@ int menuGym(){
     scanf("%d", &opc);
 
     return opc; 
+}
+
+int submenuRecepcion(){
+    int opc = 0;
+    printf("--- SubMenu Recepcion ---\n");
+    printf("1. Iniciar sesion\n");
+    printf("2. Cerrar Aplicacion\n");
+    printf("10. VOLVER ATRAS\n");
 }
 
 int menuRecepcion(){
@@ -106,26 +110,6 @@ int typeUser(){
     return type;
 }
 
-void contraseniaValida(int opc){
-    switch(opc){
-        case 1:
-            printf("\n\n¡Tu Contrasenia es VALIDA!!!\n");
-            printf("\n\n¡Generaremos tu Usuario de tipo NORMAL!!1\n");
-            printf("\nEspere...");
-            Sleep(2000);
-            break;
-        case 2:
-            printf("\n\nTu Contrasenia es VALIDA!!!\n");
-            printf("\n\nGeneraremos tu Usuario de tipo ENTRENADOR!!!\n");
-            printf("\nEspere...");
-            Sleep(2000);
-            break;
-        default:
-            printf("\nImposible acceder aqui...");
-            break;
-    }
-}
-
 void casoDiez(){
 
     system("cls");
@@ -142,7 +126,7 @@ int menuJoinGym(){
     printf("--- SubMenu GYM ---\n");
     
     printf("1. Listar socios y la actividad que desarollan\n");
-    printf("2. Añadir rutina a un grupo específico.\n");
+    printf("2. AÃƒÂ±adir rutina a un grupo especÃƒÂ­fico.\n");
     printf("3. Cerrar el programa\n");
     printf("10. VOLVER ATRAS\n");
 

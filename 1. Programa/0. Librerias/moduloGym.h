@@ -13,7 +13,7 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
     
     rewind(entrenadores);
 
-    fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
+    fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
 
     while(!feof(entrenadores) && bandera == 0){
         if((strcmp(entrenador.nombreUsuario,nombreUser) == 0)){
@@ -27,7 +27,7 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
             }
         }
 
-        fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
+        fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
     }
 
     return bandera;

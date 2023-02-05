@@ -8,6 +8,7 @@
         "register.h": "c",
         "login.h": "c",
         "string.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "stdlib.h": "c"
     }
 }

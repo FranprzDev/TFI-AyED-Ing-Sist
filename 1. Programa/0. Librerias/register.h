@@ -1,24 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <string.h>
-#include <windows.h>
-#include <ctype.h>
-#include <stdbool.h>
-
-struct adminUser{
-    char nombreUsuario[10];
-    char contrasenia[32];
-    char apellidoNombre[60]; 
-    int legajoEntrenador;
-    int grupoEntrenador;
-    int typeAccount; 
-    // TypeAccount: 
-    // 1 - Administrador 
-    // 2 - Entrenador
-};
-
 int generarLegajo() {
     srand(time(NULL)); 
     return rand() % 99999 + 10000; 
@@ -44,12 +23,12 @@ int validarUnicidadAdmin(char nombreUsuario[10], FILE *entrenadores){
     }else{
         rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
+        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
+            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -131,7 +110,7 @@ int validarNombreUsuarioAdmin(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // esta es la unicidad común para el administrador
+    // esta es la unicidad comÃƒÂºn para el administrador
 
     unicidad = validarUnicidadAdmin(nombreUsuario, entrenadores);
 
@@ -168,12 +147,12 @@ int validarUnicidadEntrenador(char nombreUsuario[10], FILE *entrenadores){
     }else{
         rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
+        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(adminUser), 1, entrenadores);
+            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -191,7 +170,7 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // Aqui hacemos una nueva función...
+    // Aqui hacemos una nueva funciÃƒÂ³n...
 
     unicidad = validarUnicidadEntrenador(nombreUsuario, entrenadores);
 
@@ -209,9 +188,9 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
 }
 
 /*
-    ################################ VALIDACIÓN DE USUARIO ########################
+    ################################ VALIDACIÃƒâ€œN DE USUARIO ########################
 
-    ################################ VALIDACIÓN DE CONTRASENIA ########################
+    ################################ VALIDACIÃƒâ€œN DE CONTRASENIA ########################
 */
 
 int validTriple(char contrasenia[32], int longitudContra) {
@@ -238,8 +217,8 @@ int validTriple(char contrasenia[32], int longitudContra) {
 }
 
 int caractAlfa(char contrasenia[32], int longitudContra){
-    // No podrá contener ningún carácter de puntuación, ni acentos, ni espacios. 
-    // Sólo caracteres alfanuméricos. 
+    // No podrÃƒÂ¡ contener ningÃƒÂºn carÃƒÂ¡cter de puntuaciÃƒÂ³n, ni acentos, ni espacios. 
+    // SÃƒÂ³lo caracteres alfanumÃƒÂ©ricos. 
     /*
         de 65 a 90
         de 97 a 122
@@ -403,7 +382,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\nÃ‚Â¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el usuario validada al struct para luego guardar al archivo
@@ -445,7 +424,10 @@ void generarCuentaAdministrador(FILE *entrenadores) {
         }while(validacionContrasenia == 0);  
     }
 
-    contraseniaValida(1);
+    printf("\n\nTu Contrasenia es VALIDA!!!\n");
+    printf("\n\nGeneraremos tu Usuario de tipo ADMINISTRADOR!!!\n");
+    printf("\nEspere... \n");
+    Sleep(2000);
 
     // Copio la contrasenia validada al struct para luego guardar al archivo
     strcpy(account.contrasenia,contrasenia);
@@ -464,7 +446,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     system("pause");
     system("cls");
 
-    // Aquí se terimno esto, entonces se vuelve a la función principal donde se puede generar uno nuevo
+    // AquÃƒÂ­ se terimno esto, entonces se vuelve a la funciÃƒÂ³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
 
@@ -501,7 +483,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\nÃ‚Â¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
@@ -540,7 +522,10 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionContrasenia == 0);  
     }
 
-    contraseniaValida(2);
+    printf("\n\nTu Contrasenia es VALIDA!!!\n");
+    printf("\n\nGeneraremos tu Usuario de tipo ENTRENADOR!!!\n");
+    printf("\nEspere... \n");
+    Sleep(2000);
     strcpy(account.contrasenia, contrasenia);
     account.typeAccount = 2;
 
@@ -555,6 +540,6 @@ void generarCuentaEntrenador(FILE *entrenadores){
     generarCuentaEnEntrenadores(entrenadores, account, 2);
     system("cls");
 
-    // Aquí se terimno esto, entonces se vuelve a la función principal donde se puede generar uno nuevo
+    // AquÃƒÂ­ se terimno esto, entonces se vuelve a la funciÃƒÂ³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
