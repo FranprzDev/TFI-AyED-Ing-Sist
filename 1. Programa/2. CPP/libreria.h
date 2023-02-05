@@ -11,12 +11,23 @@
 /*
 	--- ESTRUCTURAS --- (10 - 60)
 */
+
+struct laburo{
+    int diasTrabajo[5]; /* de lunes a sabado */
+    int horasTrabajadas[5]; /* donde haya 1 en dia de trabajo -> pueden haber horas trabajo como max 6hs*/ 
+};
+
+struct actividades{
+    int Zumba; /* todas las act son 2hs siempre ... */
+    int Spining;
+    int Pilate;
+};
+
 struct fecha{
 	int dia;
 	int mes;
 	int anio;	
 };
-
 
 struct adminUser{
     char nombreUsuario[10];
@@ -24,7 +35,8 @@ struct adminUser{
     char apellidoNombre[60]; 
     int legajoEntrenador;
     int grupoEntrenador;
-    int typeAccount; 
+    int typeAccount;
+    laburo trabajo;
     // TypeAccount: 
     // 1 - Administrador 
     // 2 - Entrenador
@@ -40,7 +52,8 @@ struct socios{
     char apynom[60];
     char domicilio[30];
     char rutina[380];
-     // struct enlazado
+    actividades actividad;
+    // struct enlazado
     // socios --> usuarios.dat
 };
 
@@ -168,7 +181,7 @@ int validarNombreUsuarioAdmin(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // esta es la unicidad comÃƒÂºn para el administrador
+    // esta es la unicidad comÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºn para el administrador
 
     unicidad = validarUnicidadAdmin(nombreUsuario, entrenadores);
 
@@ -228,7 +241,7 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // Aqui hacemos una nueva funciÃƒÂ³n...
+    // Aqui hacemos una nueva funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n...
 
     unicidad = validarUnicidadEntrenador(nombreUsuario, entrenadores);
 
@@ -246,9 +259,9 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
 }
 
 /*
-    ################################ VALIDACIÃƒâ€œN DE USUARIO ########################
+    ################################ VALIDACION DE USUARIO ########################
 
-    ################################ VALIDACIÃƒâ€œN DE CONTRASENIA ########################
+    ################################ VALIDACION DE CONTRASENIA ########################
 */
 
 int validTriple(char contrasenia[32], int longitudContra) {
@@ -275,8 +288,6 @@ int validTriple(char contrasenia[32], int longitudContra) {
 }
 
 int caractAlfa(char contrasenia[32], int longitudContra){
-    // No podrÃƒÂ¡ contener ningÃƒÂºn carÃƒÂ¡cter de puntuaciÃƒÂ³n, ni acentos, ni espacios. 
-    // SÃƒÂ³lo caracteres alfanumÃƒÂ©ricos. 
     /*
         de 65 a 90
         de 97 a 122
@@ -372,8 +383,6 @@ int validarContrasenia(char contrasenia[32], int longitudContra){
 
     int accept = 0;
     
-    printf("%d %d %d %d \n", validacionTriple, caracterAlfanumerico, caractNumConsecut, consecutividadAlfabetica);
-    
     system("pause");
 
     if(validacionTriple == 1 && caracterAlfanumerico == 1 && caractNumConsecut == 1 && consecutividadAlfabetica == 1){
@@ -401,7 +410,7 @@ void generarCuentaEnEntrenadores(FILE *entrenadores, adminUser userWrite, int op
         rewind(entrenadores);
         fseek(entrenadores, 0, SEEK_END);
 
-        fwrite(&userWrite, sizeof(adminUser), 1, entrenadores);
+        fwrite(&userWrite, sizeof(userWrite), 1, entrenadores);
            
 }
 
@@ -440,7 +449,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\nÃ‚Â¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el usuario validada al struct para luego guardar al archivo
@@ -504,7 +513,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     system("pause");
     system("cls");
 
-    // AquÃƒÂ­ se terimno esto, entonces se vuelve a la funciÃƒÂ³n principal donde se puede generar uno nuevo
+    // AquÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
 
@@ -541,7 +550,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\nÃ‚Â¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
@@ -598,7 +607,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
     generarCuentaEnEntrenadores(entrenadores, account, 2);
     system("cls");
 
-    // AquÃƒÂ­ se terimno esto, entonces se vuelve a la funciÃƒÂ³n principal donde se puede generar uno nuevo
+    // AquÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
 
@@ -621,7 +630,7 @@ int menuPrincipal(){
     int opc = 0;
     printf("--- Menu Principal ---\n");
 
-    printf("Bienvenido al Sistema 8teenGym");
+    printf("Bienvenido al Sistema 'Mothers on the move'");
 
     printf("\nDecide a que modulo del sistema quiere ingresar: ");
     printf("\n(Para acceder a los modulos antes necesitas tener una cuenta)");
@@ -667,10 +676,9 @@ int menuRecepcion(){
     printf("--- SubMenu Recepcion ---\n");
     
     printf("1. Registrar Socios\n");
-    printf("2. Registrar actividades de Socios\n");
-    printf("3. Listado de Socios\n");
-    printf("4. Listado de fechas de pagos\n");
-    printf("5. Cerrar Aplicacion\n");
+    printf("2. Listado de Socios\n");
+    printf("3. Listado de fechas de pagos\n");
+    printf("4. Cerrar Aplicacion\n");
     printf("10. VOLVER ATRAS\n");
 
     printf("\nIngrese su opcion: ");
@@ -683,11 +691,9 @@ int menuAdmin(){
     int opc = 0;
     printf("--- SubMenu Administracion ---\n");
     
-    printf("1. Registrar usuario de Recepcion\n");
-    printf("2. Registrar actividades del Gym\n");
-    printf("3. Calcular pago del entrenador\n");
-    printf("4. Entrenador con mayor carga horaria\n");
-    printf("5. Cerrar Aplicacion\n");
+    printf("1. Calcular pago del entrenador\n");
+    printf("2. Entrenador con mayor carga horaria\n");
+    printf("3. Cerrar Aplicacion\n");
     printf("10. VOLVER ATRAS\n");
 
     printf("\nIngrese su opcion: ");
@@ -745,7 +751,7 @@ int menuJoinGym(){
     printf("--- SubMenu GYM ---\n");
     
     printf("1. Listar socios y la actividad que desarollan\n");
-    printf("2. AÃƒÂ±adir rutina a un grupo especÃƒÂ­fico.\n");
+    printf("2. AÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±adir rutina a un grupo especÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­fico.\n");
     printf("3. Cerrar el programa\n");
     printf("10. VOLVER ATRAS\n");
 
@@ -769,7 +775,7 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
     
     rewind(entrenadores);
 
-    fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
+    fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
 
     while(!feof(entrenadores) && bandera == 0){
         if((strcmp(entrenador.nombreUsuario,nombreUser) == 0)){
@@ -783,7 +789,7 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
             }
         }
 
-        fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
+        fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
     }
 
     return bandera;
@@ -874,14 +880,14 @@ int loguearAdministrador(FILE *entrenadores, char nombreValidado[10]){
     _flushall();
     gets(contrasenia);
 
-    accept = validarUsuarioEntrenador(entrenadores, contrasenia, nombreUsuario);
+    accept = validarAdmin(entrenadores, contrasenia, nombreUsuario);
 
     strcpy(nombreValidado,nombreUsuario);
 
     return accept;
 }
 
-int loguearAdminDb(FILE *entrenadores, char nombreValidado[10]){
+int loguearAdminsitradorDb(FILE *entrenadores, char nombreValidado[10]){
     int accept = 0;
 
     system("cls");
@@ -893,4 +899,199 @@ int loguearAdminDb(FILE *entrenadores, char nombreValidado[10]){
     if(accept == 0){ printf("\nHubo un error en el login. Intentelo de nuevo \n"); }
 
     return accept;
+}
+
+
+
+// Modulo de Recepcion 900 en adelante
+
+int generarNumSoc() {
+    srand(time(NULL)); 
+    return rand() % 99999 + 10000; 
+}
+
+void registrarActividadSocio(FILE *archSocios, int nroSocio){
+    socios socio;
+    int opcion;
+    char actividad[30];
+    /*
+        Si hay un 1 en alguna actividad significa que hace dicha actividad.
+    */
+    system("cls");
+    printf("\n1- Zumba ; 2 - Spining ; 3 - Pilate \n");
+    printf("Que actividad desea registrar (1-2-3): ");
+    scanf("%d", &opcion);
+
+    switch(opcion){
+        case 1:
+            socio.actividad.Zumba = 1;
+        break;
+        case 2:
+            socio.actividad.Spining = 1;
+        break;
+        case 3:
+            socio.actividad.Pilate = 1;
+        break;
+        default:
+            printf("No se registro una actividad valida...");
+        break;
+    }
+}
+
+void registrarSocio(FILE *archSocios, int &nroSocio) {
+    socios socio;
+    char apynombre[60];
+    char domicilio[30];
+    int dni;
+    float altura;
+    float peso;
+    int dia, mes, anio;
+
+    system("cls");
+    printf("Ingrese el nombre: \n");
+    _flushall();
+    gets(apynombre);
+    printf("Ingrese el domicilio: \n");
+    _flushall();
+    gets(domicilio);
+    printf("Ingrese el DNI: \n");
+    scanf("%d", &dni);
+
+    nroSocio = generarNumSoc();
+
+    printf("Ingrese la Altura (mts): \n");
+    scanf("%f", &altura);
+    printf("Ingrese el peso (kg): \n");
+    scanf("%f", &peso);
+
+    printf("Ingrese el dia que ingreso el socio: \n");
+    scanf("%d", &dia);
+    printf("Ingrese el mes que ingreso el socio: \n");
+    scanf("%d", &mes);
+    printf("Ingrese el anio que ingreso el socio: \n");
+    scanf("%d", &anio);
+
+    socio.fech.dia = dia;
+    socio.fech.mes = mes;
+    socio.fech.anio = anio;
+    socio.altura = altura;
+    socio.peso = peso;
+    socio.dni = dni;
+    socio.nroSoc = nroSocio;
+    strcpy(socio.apynom,apynombre);
+    strcpy(socio.domicilio,domicilio);
+
+    fwrite(&socio, sizeof(socios), 1, archSocios);
+
+    printf("\nSocio registrado correctamente...\n");
+}
+
+// listarSocios -> 3
+void listarSocios(FILE *archSocios){
+    int contador = 0;
+    socios socio;
+
+    system("cls");
+	rewind(archSocios);
+    fread(&socio, sizeof(socios), 1, archSocios);
+
+    while(!feof(archSocios)){
+        printf("\nSocio %d \n", contador);
+        printf("Apellido y Nombre: %d \n", socio.apynom);
+        printf("Nro Socio: %d \n", socio.nroSoc);
+        printf("DNI: %d \n", socio.dni);
+        printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
+        printf("Altura: %d \n", socio.altura);
+        printf("Peso: %d \n", socio.peso);
+        printf("Domicilio: %d \n", socio.domicilio);
+        printf("\n--------------------");
+
+        fread(&socio, sizeof(socios), 1, archSocios);
+    }
+    
+    printf("\n\n");
+	system("pause");
+}
+
+// listarSocios -> 4
+
+void listarFechaPagos(FILE *archSocios){
+    int contador = 0;
+    socios socio;
+
+    system("cls");
+    rewind(archSocios);
+
+    fread(&socio, sizeof(socios), 1, archSocios);
+
+    printf("\nListado de Fecha de Pagos... \n");
+
+    while(!feof(archSocios)){
+
+        printf("\nSocio %d \n", contador);
+        
+        printf("Dia: %d \n", socio.fech.dia);
+        printf("Mes: %d \n", socio.fech.mes);
+        printf("Anio: %d \n", socio.fech.anio);
+        printf("\n--------------------");
+
+        fread(&socio, sizeof(socios), 1, archSocios);
+    }
+
+
+}
+
+/*
+
+    Modulo Gimnasio
+  
+*/
+
+void listadoSociosActividad(FILE *archSocios){
+    int contador = 0;
+    socios socio;
+
+    system("cls");
+	rewind(archSocios);
+    fread(&socio, sizeof(socios), 1, archSocios);
+
+    while(!feof(archSocios)){
+        printf("\nSocio %d \n", contador);
+        printf("Apellido y Nombre: %d \n", socio.apynom);
+        printf("Nro Socio: %d \n", socio.nroSoc);
+        printf("DNI: %d \n", socio.dni);
+        printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
+        printf("Altura: %d \n", socio.altura);
+        printf("Peso: %d \n", socio.peso);
+        printf("Domicilio: %d \n", socio.domicilio);
+        printf("\n\n");
+        printf("Actividades: ");
+        printf("\n--------------------");
+        if(socio.actividad.Zumba == 1){
+            printf("\nEl socio hace Zumba. \n");
+        }
+        if(socio.actividad.Spining == 1){
+            printf("\nEl socio hace Spining. \n");
+        }
+        if(socio.actividad.Pilate == 1){
+            printf("\nEl socio hace Pilates. \n");
+        }
+
+        fread(&socio, sizeof(socios), 1, archSocios);
+    }
+    
+    printf("\n\n");
+	system("pause");
+}
+
+void registrarRutina(FILE *archSocios){
+    socios socio;
+    char rutina[380];
+
+    printf("\nIngrese la rutina: ");
+    gets(rutina);
+
+    strcpy(socio.rutina,rutina);
+
+    printf("\n\nRegistro correctamente la rutina\n\n");
 }

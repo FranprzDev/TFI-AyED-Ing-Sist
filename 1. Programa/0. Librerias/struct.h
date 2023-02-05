@@ -1,6 +1,3 @@
-#ifndef STRUCT_H
-#define STRUCT_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,5 +45,3 @@ struct turnos{
     int legajoEntrenador;
     int nroSoc;
 }; 
-
-#endif
