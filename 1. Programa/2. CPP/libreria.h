@@ -1053,22 +1053,32 @@ void listarFechaPagos(FILE *archSocios){
     system("cls");
     rewind(archSocios);
 
-    fread(&socio, sizeof(socios), 1, archSocios);
+    int size = ftell(archSocios);
+    fseek(archSocios,0,SEEK_END);
 
-    printf("\nListado de Fecha de Pagos... \n");
-
-    while(!feof(archSocios)){
-
-        printf("\nSocio %d \n", contador);
+    if(archSocios == 0){
+        printf("\n\nNo pudimos listar el archivo de socios...\n\n");
         
-        printf("Dia: %d \n", socio.fech.dia);
-        printf("Mes: %d \n", socio.fech.mes);
-        printf("Anio: %d \n", socio.fech.anio);
-        printf("\n--------------------");
+    }else{
+
+        rewind(archSocios);
 
         fread(&socio, sizeof(socios), 1, archSocios);
-    }
 
+        printf("\nListado de Fecha de Pagos... \n");
+
+        while(!feof(archSocios)){
+
+            printf("\nSocio %d \n", contador);
+            
+            printf("Dia: %d \n", socio.fech.dia);
+            printf("Mes: %d \n", socio.fech.mes);
+            printf("Anio: %d \n", socio.fech.anio);
+            printf("\n--------------------");
+
+            fread(&socio, sizeof(socios), 1, archSocios);
+        }
+    }
 
 }
 
@@ -1124,6 +1134,21 @@ void listadoSociosActividad(FILE *archSocios){
     printf("\n\n");
 }
 
+int contarPalabras(char cadena[4000]){
+    int i, contadorPalabras = 0;
+    int longitud = strlen(cadena);
+    
+    for(i=0; i<longitud; i++)
+    {
+        if(cadena[i] == ' ' || cadena[i] == '\0')
+        {
+            contadorPalabras++;
+        }
+    }
+    
+    return (contadorPalabras + 1);
+}
+
 int buscarSocio(FILE *archSocios, int numeroSocio){
 	socios socio;
 	int bandera = 0;
@@ -1145,7 +1170,7 @@ int buscarSocio(FILE *archSocios, int numeroSocio){
 
 void registrarRutina(FILE *archSocios){
     socios socio;
-    char rutina[380];
+    char rutina[4000];
     int numeroSocio;
     
     rewind(archSocios);
@@ -1154,7 +1179,7 @@ void registrarRutina(FILE *archSocios){
     int size = ftell(archSocios);
     
     if(size == 0){
-    	printf("\nNo podemos registrar una rutina, el archivo esta vacio. \n\n");
+    	printf("\nNo podemos registrar una rutina, no existen socios. \n\n");
     	system("pause");
 	}
 	else{
@@ -1166,15 +1191,26 @@ void registrarRutina(FILE *archSocios){
     	int encontroSocio = buscarSocio(archSocios, numeroSocio);
     
 		if(encontroSocio == 1){
-    		printf("\nIngrese la rutina: ");
-    		gets(rutina);
-	
-	    	strcpy(socio.rutina,rutina);
 
-    		printf("\n\nRegistro correctamente la rutina\n\n");	
-    		
-    		system("pause");
-		}
+            // aqui contamos la cantidad de caracteres...
+            
+            do {
+                printf("\nIngrese la rutina (No mas de 380 palabras): ");
+                _flushall();
+                gets(rutina);
+
+                int cantidadPalabras = contarPalabras(rutina);
+                
+            }while(cantidadPalabras > 380);
+            
+            strcpy(socio.rutina,rutina);
+            printf("\n\nRegistro correctamente la rutina\n\n");	
+
+		}else{
+            printf("\nNo se pudo encontrar el socio en el registro... \n\n");
+        }
 	}
+
+    system("pause");
     
 }
