@@ -200,7 +200,6 @@ int main(void){
                                 banderaCerrado = 0;
                             break;
                         }
-
                     break;
                     case 2:
                         printf("\n\nOk. Cerraremos el Programa.");

@@ -50,7 +50,7 @@ struct socios{
     int nroSoc;
     char apynom[60];
     char domicilio[30];
-    char rutina[380];
+    char rutina[4000];
     actividades actividad;
     // struct enlazado
     // socios --> usuarios.dat
