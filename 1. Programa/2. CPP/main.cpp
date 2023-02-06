@@ -178,11 +178,11 @@ int main(void){
                                     break;
                                     case 2:
                                         printf("\n\nCerrando programa. \n\n");
-                                        //banderaCerrado = 0;
+                                        banderaCerrado = 0;
                                     break;
                                     default:
                                         printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
-                                        //banderaCerrado = 0;
+                                        banderaCerrado = 0;
                                 }
                             break;
                             case 2:
@@ -193,14 +193,13 @@ int main(void){
                             break;
                             case 4:
                                 printf("\n\nCerrando programa. \n\n");
-                                //banderaCerrado = 0;
+                                banderaCerrado = 0;
                             break;
                             default:
                                 printf("\n\nIngreso una opcion incorrecta, por lo tanto cerraremos el programa.");
-                                //banderaCerrado = 0;
+                                banderaCerrado = 0;
                             break;
                         }
-
                     break;
                     case 2:
                         printf("\n\nOk. Cerraremos el Programa.");
