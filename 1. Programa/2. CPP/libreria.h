@@ -48,7 +48,6 @@ struct socios{
     float altura;
     float peso;
     int nroSoc;
-    int grupoEspecifico; // 1 -> grupo 'a' 2 -> grupo 'b' 3 -> grupo 'c'
     char apynom[60];
     char domicilio[30];
     char rutina[380];
@@ -94,12 +93,12 @@ int validarUnicidadAdmin(char nombreUsuario[10], FILE *entrenadores){
     }else{
         rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        fread(&comparingUser, sizeof(comparingUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            fread(&comparingUser, sizeof(comparingUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -181,7 +180,7 @@ int validarNombreUsuarioAdmin(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // esta es la unicidad comÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºn para el administrador
+    // esta es la unicidad comÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âºn para el administrador
 
     unicidad = validarUnicidadAdmin(nombreUsuario, entrenadores);
 
@@ -241,7 +240,7 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // Aqui hacemos una nueva funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n...
+    // Aqui hacemos una nueva funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n...
 
     unicidad = validarUnicidadEntrenador(nombreUsuario, entrenadores);
 
@@ -449,19 +448,17 @@ void generarCuentaAdministrador(FILE *entrenadores) {
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
-    printf("\nIngrese la contrasenia: ");
-
     // Copio el usuario validada al struct para luego guardar al archivo
     strcpy(account.nombreUsuario,nombreUsuario);
+
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\nIngrese la contrasenia: ");
 
     _flushall();
     gets(contrasenia);
 
     longitud = calcLong(contrasenia);
     
-    system("pause");
-
     if(longitud < 6){
         do{
             printf("\n\nLa longitud es muy corta, vuelve a ingresar la contrasenia \n\n");
@@ -513,7 +510,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     system("pause");
     system("cls");
 
-    // AquÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
+    // AquÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
 
@@ -550,7 +547,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\nÂ¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
@@ -607,7 +604,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
     generarCuentaEnEntrenadores(entrenadores, account, 2);
     system("cls");
 
-    // AquÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
+    // AquÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
     // si es que se quiere...
 }
 
@@ -653,7 +650,7 @@ int menuGym(){
     int opc = 0;
     printf("--- SubMenu GYM ---\n");
     
-    printf("1.  Iniciar sesion como entrenador para mas opciones\n");
+    printf("1. Iniciar sesion como entrenador para mas opciones\n");
     printf("2. Cerrar el programa\n");
     printf("10. VOLVER ATRAS\n");
 
@@ -669,6 +666,11 @@ int submenuRecepcion(){
     printf("1. Iniciar sesion\n");
     printf("2. Cerrar Aplicacion\n");
     printf("10. VOLVER ATRAS\n");
+    
+    printf("\nIngrese su opcion: ");
+    scanf("%d", &opc);
+
+    return opc; 
 }
 
 int menuRecepcion(){
@@ -751,7 +753,7 @@ int menuJoinGym(){
     printf("--- SubMenu GYM ---\n");
     
     printf("1. Listar socios y la actividad que desarollan\n");
-    printf("2. AÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±adir rutina a un grupo especÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­fico.\n");
+    printf("2. Registrar una rutina para un grupo especifico.\n");
     printf("3. Cerrar el programa\n");
     printf("10. VOLVER ATRAS\n");
 
@@ -773,9 +775,12 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
     int bandera = 0;
     struct adminUser entrenador;
     
+    fclose(entrenadores);
+    
+    entrenadores = fopen("Entrenadores.dat","a+b");
     rewind(entrenadores);
 
-    fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
+    fread(&entrenador, sizeof(entrenador), 1, entrenadores);
 
     while(!feof(entrenadores) && bandera == 0){
         if((strcmp(entrenador.nombreUsuario,nombreUser) == 0)){
@@ -789,7 +794,7 @@ int validarUsuarioEntrenador(FILE *entrenadores, char contrasenia[32], char nomb
             }
         }
 
-        fwrite(&entrenador, sizeof(adminUser), 1, entrenadores);
+        fread(&entrenador, sizeof(entrenador), 1, entrenadores);
     }
 
     return bandera;
@@ -800,7 +805,6 @@ int loguearEntrenador(FILE *entrenadores, char nombreValidado[10]){
     char contrasenia[32];
     int accept = 0;
 
-    system("cls");
     Sleep(200);
 
     printf("\nIngrese su nombre de usuario: ");
@@ -843,25 +847,43 @@ int validarAdmin(FILE *entrenadores, char contrasenia[32], char nombreUser[10]){
     int bandera = 0;
     struct adminUser entrenador;
     
+    fclose(entrenadores);
+    entrenadores = fopen("Entrenadores.dat","a+b"); // abrir archivo
+    
     rewind(entrenadores);
+    fseek(entrenadores, 0, SEEK_END);
+    
+    int size = ftell(entrenadores);
+   	
+	if(size == 0) {
+		printf("\nError, no existen administradores para ingresar. Crea uno... \n\n");
+		system("pause");
+		
+		system("cls");
+	}else{
+		
+    	rewind(entrenadores);
 
-    fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
+    	fread(&entrenador, sizeof(entrenador), 1, entrenadores);	
+    	
+    	while(!feof(entrenadores) && bandera == 0){
+        	if((strcmp(entrenador.nombreUsuario,nombreUser) == 0)){
+            	// se encontro el nombre de usuario
+            	// probamos con la contrasenia
+            	if(strcmp(entrenador.contrasenia,contrasenia) == 0){
+                	if(entrenador.typeAccount == 1){
+                    	printf("\n\n\t\tLa contrasenia coincide, entonces tendras el acceso.\n\n");
+                    	bandera = 1;
+                	}
+            	}
+        	}
 
-    while(!feof(entrenadores) && bandera == 0){
-        if((strcmp(entrenador.nombreUsuario,nombreUser) == 0)){
-            // se encontro el nombre de usuario
-            // probamos con la contrasenia
-            if(strcmp(entrenador.contrasenia,contrasenia) == 0){
-                if(entrenador.typeAccount == 1){
-                    printf("\n\n\t\tLa contrasenia coincide, entonces tendras el acceso.\n\n");
-                    bandera = 1;
-                }
-            }
-        }
+        	fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+    	}
+    	
+	}
 
-        fwrite(&entrenador, sizeof(entrenador), 1, entrenadores);
-    }
-
+	printf("\n"); system("pause");
     return bandera;
 }
 
@@ -893,7 +915,7 @@ int loguearAdminsitradorDb(FILE *entrenadores, char nombreValidado[10]){
     system("cls");
 
     Sleep(200);
-    printf("\nLogearas un Entrenador \n");
+    printf("\nLogearas un Administrador \n");
     accept = loguearAdministrador(entrenadores, nombreValidado);
 
     if(accept == 0){ printf("\nHubo un error en el login. Intentelo de nuevo \n"); }
@@ -938,7 +960,7 @@ void registrarActividadSocio(FILE *archSocios, int nroSocio){
     }
 }
 
-void registrarSocio(FILE *archSocios, int &nroSocio) {
+void registrarSocio(FILE *archSocios, int &nroSocio, char nombreUser[10]) {
     socios socio;
     char apynombre[60];
     char domicilio[30];
@@ -983,7 +1005,16 @@ void registrarSocio(FILE *archSocios, int &nroSocio) {
 
     fwrite(&socio, sizeof(socios), 1, archSocios);
 
-    printf("\nSocio registrado correctamente...\n");
+    printf("\nSocio registrado correctamente por el administrador %s ...\n", nombreUser);
+    // aqui se puede hacer una correcion:
+    
+    /*
+    	Hacemos una comparacion dependiendo del size del arch dependiendo en que momento esta,
+    	si es que el sizeActual es mayor que el sizeAnterior entonces el archivo se modifico y ademas
+    	se creo un nuevo socio, por lo tanto se genero.
+    	
+    	Aqui esta posible exception no esta considerada.
+    */
 }
 
 // listarSocios -> 3
@@ -996,14 +1027,14 @@ void listarSocios(FILE *archSocios){
     fread(&socio, sizeof(socios), 1, archSocios);
 
     while(!feof(archSocios)){
-        printf("\nSocio %d \n", contador);
-        printf("Apellido y Nombre: %d \n", socio.apynom);
+        printf("\nSocio [%d] \n", contador);
+        printf("Apellido y Nombre: %s \n", socio.apynom);
         printf("Nro Socio: %d \n", socio.nroSoc);
         printf("DNI: %d \n", socio.dni);
         printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
-        printf("Altura: %d \n", socio.altura);
-        printf("Peso: %d \n", socio.peso);
-        printf("Domicilio: %d \n", socio.domicilio);
+        printf("Altura: %f \n", socio.altura);
+        printf("Peso: %f \n", socio.peso);
+        printf("Domicilio: %s \n", socio.domicilio);
         printf("\n--------------------");
 
         fread(&socio, sizeof(socios), 1, archSocios);
@@ -1053,45 +1084,97 @@ void listadoSociosActividad(FILE *archSocios){
 
     system("cls");
 	rewind(archSocios);
-    fread(&socio, sizeof(socios), 1, archSocios);
+	
+	fseek(archSocios, 0, SEEK_END);
+	int tamanio = ftell(archSocios);
+	
+	if(tamanio == 0){
+		system("cls");
+		printf("No hay socios que listar, el archivo esta vacio...\n\n");
+		system("pause");
+	}else{
+    	fread(&socio, sizeof(socios), 1, archSocios);
 
-    while(!feof(archSocios)){
-        printf("\nSocio %d \n", contador);
-        printf("Apellido y Nombre: %d \n", socio.apynom);
-        printf("Nro Socio: %d \n", socio.nroSoc);
-        printf("DNI: %d \n", socio.dni);
-        printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
-        printf("Altura: %d \n", socio.altura);
-        printf("Peso: %d \n", socio.peso);
-        printf("Domicilio: %d \n", socio.domicilio);
-        printf("\n\n");
-        printf("Actividades: ");
-        printf("\n--------------------");
-        if(socio.actividad.Zumba == 1){
-            printf("\nEl socio hace Zumba. \n");
-        }
-        if(socio.actividad.Spining == 1){
-            printf("\nEl socio hace Spining. \n");
-        }
-        if(socio.actividad.Pilate == 1){
-            printf("\nEl socio hace Pilates. \n");
-        }
+    	while(!feof(archSocios)){
+        	printf("\nSocio %d \n", contador);
+        	printf("Apellido y Nombre: %d \n", socio.apynom);
+        	printf("Nro Socio: %d \n", socio.nroSoc);
+        	printf("DNI: %d \n", socio.dni);
+        	printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
+        	printf("Altura: %d \n", socio.altura);
+        	printf("Peso: %d \n", socio.peso);
+        	printf("Domicilio: %d \n", socio.domicilio);
+        	printf("\n\n");
+        	printf("Actividades: ");
+        	printf("\n--------------------");
+        	if(socio.actividad.Zumba == 1){
+            	printf("\nEl socio hace Zumba. \n");
+        	}
+        	if(socio.actividad.Spining == 1){
+            	printf("\nEl socio hace Spining. \n");
+        	}
+        	if(socio.actividad.Pilate == 1){
+            	printf("\nEl socio hace Pilates. \n");
+        	}
 
-        fread(&socio, sizeof(socios), 1, archSocios);
-    }
-    
+        	fread(&socio, sizeof(socios), 1, archSocios);
+    	}	
+	}
+	
     printf("\n\n");
-	system("pause");
+}
+
+int buscarSocio(FILE *archSocios, int numeroSocio){
+	socios socio;
+	int bandera = 0;
+	
+	rewind(archSocios);
+	
+	fread(&socio, sizeof(socios), 1, archSocios);
+	
+	while(!feof(archSocios) && bandera == 0){
+		if(numeroSocio == socio.nroSoc){
+			bandera = 1;
+		}
+		
+		fread(&socio, sizeof(socios), 1, archSocios);
+	}
+	
+	return bandera;
 }
 
 void registrarRutina(FILE *archSocios){
     socios socio;
     char rutina[380];
+    int numeroSocio;
+    
+    rewind(archSocios);
+    fseek(archSocios, 0, SEEK_END);
+    
+    int size = ftell(archSocios);
+    
+    if(size == 0){
+    	printf("\nNo podemos registrar una rutina, el archivo esta vacio. \n\n");
+    	system("pause");
+	}
+	else{
+		printf("\nIngrese el numero de Socio: ");
+		scanf("%d", &numeroSocio);
+		
+		rewind(archSocios);
+    
+    	int encontroSocio = buscarSocio(archSocios, numeroSocio);
+    
+		if(encontroSocio == 1){
+    		printf("\nIngrese la rutina: ");
+    		gets(rutina);
+	
+	    	strcpy(socio.rutina,rutina);
 
-    printf("\nIngrese la rutina: ");
-    gets(rutina);
-
-    strcpy(socio.rutina,rutina);
-
-    printf("\n\nRegistro correctamente la rutina\n\n");
+    		printf("\n\nRegistro correctamente la rutina\n\n");	
+    		
+    		system("pause");
+		}
+	}
+    
 }
