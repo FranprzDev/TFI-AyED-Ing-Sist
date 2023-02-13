@@ -27,10 +27,12 @@ int main(void){
     FILE *usuarios;
     FILE *entrenadores;
     FILE *archSocios;
+    FILE *archActividades;
 
     usuarios = fopen("Usuarios.dat","a+b");
     entrenadores = fopen("Entrenadores.dat","a+b");
     archSocios = fopen("Socios.dat","a+b");
+    archActividades = fopen("Actividades.dat","a+b");
     
     /* 
         Seccion de vars y const
@@ -47,7 +49,9 @@ int main(void){
     int opcSwitchJoinGym = 0;
     int opcionReception = 0;
     int opcArchSoc = 0;
-    int nroSocio;
+    int nroSocio = 0;
+    int tipoListar = 0;
+    int legajoEntrenadorActive = 0;
 
     char nombreValidado[10];
 
@@ -90,6 +94,16 @@ int main(void){
                                 printf("Eligio un tipo de usuario incorrecto.");
                                 break;                        
                         }
+                    case 2:
+                    	printf("\nIngrese el tipo que desea listar: ");
+                    	printf("\n1. Administradores \t\t 2. Entrenadores ");
+                    	printf("\nSu opcion: ");
+                    	
+                    	scanf("%d", &tipoListar);
+                    	
+                    	listarEntrenadores(entrenadores, tipoListar);
+                    	
+                    	system("pause");
                     case 10:
                         casoDiez();
                     break;
@@ -114,7 +128,7 @@ int main(void){
 
                             switch(opcSwitchJoinGym){
                                 case 1:
-                                    listadoSociosActividad(archSocios);
+                                    //listadoSociosActividad(archSocios);
                                 break;
                                 case 2:
                                     registrarRutina(archSocios);
@@ -172,7 +186,7 @@ int main(void){
 
                                 switch(opcArchSoc){
                                     case 1:
-                                        registrarActividadSocio(archSocios, nroSocio);
+                                        //registrarActividadSocio(archSocios, nroSocio);
 
                                         printf("\nSe registro la actividad del socio... \n");
                                     break;
@@ -214,18 +228,49 @@ int main(void){
                     break;
                 }
             break;
+            // aca estamos actualmente...
             case 3:
                 system("cls");
                 opcSwitchAdministration = menuAdmin();
 
+                do
+                {
+                    inicioSesion = loguearAdminsitradorDb(entrenadores, nombreValidado);
+                    // aqui tengo que logear un administrador
+                    system("cls");
+                } while (inicioSesion == 0);
+
                 switch(opcSwitchAdministration){
                     case 1:
-                        // calcularPagoEntrenador_Administration();
+                        system("cls");
+                        registrarActividad(archActividades, entrenadores, archSocios, nombreValidado);
+                        
+                        printf("\n\nSe registro correctamente la actividad...\n\n");
+                        system("pause");
                     break;
                     case 2:
-                        // entrenadorMaxCargaHs_Administration();
+                        system("cls");
+                        do{
+                            printf("Ingrese el legajo del entrenador: ");
+                            scanf("%d", &legajoEntrenador);
+
+                            legajoEntrenadorActive = encontrarEntrenador(entrenadores, legajoEntrenador);
+                        }while(legajoEntrenadorActive == 0);
+
+                        calcularPagoEntrenador(archActividades, legajoEntrenador);
+
+                        printf("\n\n");
+
+                        system("cls");
                     break;
                     case 3:
+                        calcularMayorCargaHoraria(entrenadores, archActividades);
+
+                        printf("\n\n");
+
+                        system("cls");
+                    break;
+                    case 4:
                         printf("\n\nOk. Cerraremos el Programa.");
                         banderaCerrado = 0;    
                     break;
@@ -252,6 +297,7 @@ int main(void){
     fclose(archSocios);
     fclose(usuarios);
     fclose(entrenadores);
+    fclose(archActividades);
     printf("\n");
     system("cls");
     
