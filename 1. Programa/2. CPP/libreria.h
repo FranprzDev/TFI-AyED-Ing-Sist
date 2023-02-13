@@ -12,17 +12,6 @@
 	--- ESTRUCTURAS --- (10 - 60)
 */
 
-struct laburo{
-    int diasTrabajo[5]; /* de lunes a sabado */
-    int horasTrabajadas[5]; /* donde haya 1 en dia de trabajo -> pueden haber horas trabajo como max 6hs*/ 
-};
-
-struct actividades{
-    int Zumba; /* todas las act son 2hs siempre ... */
-    int Spining;
-    int Pilate;
-};
-
 struct fecha{
 	int dia;
 	int mes;
@@ -36,10 +25,33 @@ struct adminUser{
     int legajoEntrenador;
     int grupoEntrenador;
     int typeAccount;
-    laburo trabajo;
     // TypeAccount: 
     // 1 - Administrador 
     // 2 - Entrenador
+};
+
+
+struct dia{
+    int lunes;
+    int martes;
+    int miercoles;
+    int jueves;
+    int viernes;
+    int sabado;
+};
+
+struct turnos{
+    int turnoManiana;
+    int turnoTarde;
+    int turnoNoche;
+};
+
+struct actividades{
+    int legajoEntrenador;
+    char nombreActividad[25];
+    int codigoActividad;
+    dia dias;
+    turnos turno;
 };
 
 struct socios{
@@ -55,18 +67,60 @@ struct socios{
     // struct enlazado
     // socios --> usuarios.dat
 };
-
-struct turnos{
-	fecha fech;
-    int legajoEntrenador;
-    int nroSoc;
-}; 
-
-
+ 
 /*
 	Register (55 a 620 aprox)
 */
 
+
+void listarEntrenadores(FILE *entrenadores, int tipoListar){
+	struct adminUser reg;
+    int contador = 1;
+	
+	rewind(entrenadores);
+	
+	fseek(entrenadores, 0, SEEK_SET);
+	
+	switch(tipoListar){
+		case 1:
+            system("cls");
+            printf("--- Listado de Entrenadores ---\n", contador);
+			fread(&reg, sizeof(reg), 1, entrenadores);
+
+            while(!feof(entrenadores)){
+                if(reg.typeAccount == 1){
+                    printf("\n\n--- %d ---\n", contador);
+                    printf("Nombre Usuario: %s", reg.nombreUsuario);
+                    printf("\nLegajo: %d", reg.legajoEntrenador);
+                }
+
+                if(reg.typeAccount == 1){ contador++; }
+				
+                fread(&reg, sizeof(reg), 1, entrenadores);
+            }
+
+            printf("\n\n");
+		break;
+		case 2:
+            system("cls");
+            printf("--- Listado de Entrenadores ---\n", contador);
+			fread(&reg, sizeof(reg), 1, entrenadores);
+
+            while(!feof(entrenadores)){
+                if(reg.typeAccount == 2){
+                    printf("\n\n--- %d ---\n", contador);
+                    printf("Nombre Usuario: %s", reg.nombreUsuario);
+                    printf("\nLegajo: %d", reg.legajoEntrenador);
+                }
+
+                if(reg.typeAccount == 2){ contador++; }
+                fread(&reg, sizeof(reg), 1, entrenadores);
+            }
+
+            printf("\n\n");
+		break;		
+	}
+}
 
 int generarLegajo() {
     srand(time(NULL)); 
@@ -180,7 +234,7 @@ int validarNombreUsuarioAdmin(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // esta es la unicidad comÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âºn para el administrador
+    // esta es la unicidad para el administrador
 
     unicidad = validarUnicidadAdmin(nombreUsuario, entrenadores);
 
@@ -217,12 +271,12 @@ int validarUnicidadEntrenador(char nombreUsuario[10], FILE *entrenadores){
     }else{
         rewind(entrenadores);
 
-        fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+        fread(&comparingUser, sizeof(comparingUser), 1, entrenadores);
         while(!feof(entrenadores) && bandera == 0){
 
             comparacion = strcmp(nombreUsuario, comparingUser.nombreUsuario);
 
-            fwrite(&comparingUser, sizeof(comparingUser), 1, entrenadores);
+            fread(&comparingUser, sizeof(comparingUser), 1, entrenadores);
             if(comparacion == 0){ bandera = 1; }
         }
 
@@ -240,7 +294,7 @@ int validarNombreUsuarioEntrenador(char nombreUsuario[10], FILE *entrenadores){
     int minimo = 0;
     
 
-    // Aqui hacemos una nueva funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n...
+    // Aqui hacemos una nueva
 
     unicidad = validarUnicidadEntrenador(nombreUsuario, entrenadores);
 
@@ -410,7 +464,7 @@ void generarCuentaEnEntrenadores(FILE *entrenadores, adminUser userWrite, int op
         fseek(entrenadores, 0, SEEK_END);
 
         fwrite(&userWrite, sizeof(userWrite), 1, entrenadores);
-           
+        
 }
 
 // #Generar cuenta normal
@@ -451,7 +505,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     // Copio el usuario validada al struct para luego guardar al archivo
     strcpy(account.nombreUsuario,nombreUsuario);
 
-    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\nÂ¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     _flushall();
@@ -510,7 +564,7 @@ void generarCuentaAdministrador(FILE *entrenadores) {
     system("pause");
     system("cls");
 
-    // AquÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
+    // se terimno esto, entonces se vuelve a la func
     // si es que se quiere...
 }
 
@@ -547,7 +601,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
         }while(validacionNombreUser == 0);
     }
 
-    printf("\n\nÂ¡Tu nombre de Usuario es VALIDO!\n");
+    printf("\n\n¡Tu nombre de Usuario es VALIDO!\n");
     printf("\nIngrese la contrasenia: ");
 
     // Copio el nombre de usuario hacia el struct
@@ -604,7 +658,7 @@ void generarCuentaEntrenador(FILE *entrenadores){
     generarCuentaEnEntrenadores(entrenadores, account, 2);
     system("cls");
 
-    // AquÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ se terimno esto, entonces se vuelve a la funciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n principal donde se puede generar uno nuevo
+    // se terimno esto, entonces se vuelve a la func
     // si es que se quiere...
 }
 
@@ -693,9 +747,10 @@ int menuAdmin(){
     int opc = 0;
     printf("--- SubMenu Administracion ---\n");
     
-    printf("1. Calcular pago del entrenador\n");
-    printf("2. Entrenador con mayor carga horaria\n");
-    printf("3. Cerrar Aplicacion\n");
+    printf("1. Registrar Actividades en el Gym\n");
+    printf("2. Calcular pago del entrenador\n");
+    printf("3. Entrenador con mayor carga horaria\n");
+    printf("4. Cerrar Aplicacion\n");
     printf("10. VOLVER ATRAS\n");
 
     printf("\nIngrese su opcion: ");
@@ -713,6 +768,7 @@ int ingresar(){
 
     printf("Elige una opcion: \n");
     printf("\n1. Registrar un Usuario (ADMIN/ENTRENADOR)");
+    printf("\n2. Listar Administradores / Entrenadores (con legajo)");
     printf("\n10. Volver atras ");
     
     printf("\nSu opcion es: ");
@@ -932,34 +988,6 @@ int generarNumSoc() {
     return rand() % 99999 + 10000; 
 }
 
-void registrarActividadSocio(FILE *archSocios, int nroSocio){
-    socios socio;
-    int opcion;
-    char actividad[30];
-    /*
-        Si hay un 1 en alguna actividad significa que hace dicha actividad.
-    */
-    system("cls");
-    printf("\n1- Zumba ; 2 - Spining ; 3 - Pilate \n");
-    printf("Que actividad desea registrar (1-2-3): ");
-    scanf("%d", &opcion);
-
-    switch(opcion){
-        case 1:
-            socio.actividad.Zumba = 1;
-        break;
-        case 2:
-            socio.actividad.Spining = 1;
-        break;
-        case 3:
-            socio.actividad.Pilate = 1;
-        break;
-        default:
-            printf("No se registro una actividad valida...");
-        break;
-    }
-}
-
 void registrarSocio(FILE *archSocios, int &nroSocio, char nombreUser[10]) {
     socios socio;
     char apynombre[60];
@@ -970,27 +998,27 @@ void registrarSocio(FILE *archSocios, int &nroSocio, char nombreUser[10]) {
     int dia, mes, anio;
 
     system("cls");
-    printf("Ingrese el nombre: \n");
+    printf("Ingrese el nombre: ");
     _flushall();
     gets(apynombre);
-    printf("Ingrese el domicilio: \n");
+    printf("\nIngrese el domicilio: ");
     _flushall();
     gets(domicilio);
-    printf("Ingrese el DNI: \n");
+    printf("\nIngrese el DNI: ");
     scanf("%d", &dni);
 
     nroSocio = generarNumSoc();
 
-    printf("Ingrese la Altura (mts): \n");
+    printf("\nIngrese la Altura (mts): ");
     scanf("%f", &altura);
-    printf("Ingrese el peso (kg): \n");
+    printf("\nIngrese el peso (kg): ");
     scanf("%f", &peso);
 
-    printf("Ingrese el dia que ingreso el socio: \n");
+    printf("\nIngrese el dia que ingreso el socio: ");
     scanf("%d", &dia);
-    printf("Ingrese el mes que ingreso el socio: \n");
+    printf("\nIngrese el mes que ingreso el socio: ");
     scanf("%d", &mes);
-    printf("Ingrese el anio que ingreso el socio: \n");
+    printf("\nIngrese el anio que ingreso el socio: ");
     scanf("%d", &anio);
 
     socio.fech.dia = dia;
@@ -1031,7 +1059,6 @@ void listarSocios(FILE *archSocios){
         printf("Apellido y Nombre: %s \n", socio.apynom);
         printf("Nro Socio: %d \n", socio.nroSoc);
         printf("DNI: %d \n", socio.dni);
-        printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
         printf("Altura: %f \n", socio.altura);
         printf("Peso: %f \n", socio.peso);
         printf("Domicilio: %s \n", socio.domicilio);
@@ -1088,6 +1115,8 @@ void listarFechaPagos(FILE *archSocios){
   
 */
 
+// listado de socios actividad posicion 1068
+/*
 void listadoSociosActividad(FILE *archSocios){
     int contador = 0;
     socios socio;
@@ -1110,7 +1139,6 @@ void listadoSociosActividad(FILE *archSocios){
         	printf("Apellido y Nombre: %d \n", socio.apynom);
         	printf("Nro Socio: %d \n", socio.nroSoc);
         	printf("DNI: %d \n", socio.dni);
-        	printf("Grupo Especifico: %d \n", socio.grupoEspecifico);
         	printf("Altura: %d \n", socio.altura);
         	printf("Peso: %d \n", socio.peso);
         	printf("Domicilio: %d \n", socio.domicilio);
@@ -1133,6 +1161,7 @@ void listadoSociosActividad(FILE *archSocios){
 	
     printf("\n\n");
 }
+*/
 
 int contarPalabras(char cadena[4000]){
     int i, contadorPalabras = 0;
@@ -1172,6 +1201,7 @@ void registrarRutina(FILE *archSocios){
     socios socio;
     char rutina[4000];
     int numeroSocio;
+    int cantidadPalabras = 0;
     
     rewind(archSocios);
     fseek(archSocios, 0, SEEK_END);
@@ -1199,7 +1229,7 @@ void registrarRutina(FILE *archSocios){
                 _flushall();
                 gets(rutina);
 
-                int cantidadPalabras = contarPalabras(rutina);
+                cantidadPalabras = contarPalabras(rutina);
                 
             }while(cantidadPalabras > 380);
             
@@ -1213,4 +1243,356 @@ void registrarRutina(FILE *archSocios){
 
     system("pause");
     
+}
+
+//  ### registrarActividades
+
+int generarCodigoActividad() {
+  srand(time(NULL));
+  int codigo = rand() % 1000000000 + 100000000;
+  return codigo;
+}
+
+
+int encontrarEntrenador(FILE *entrenadores, int legajo)
+{
+    // busco el archivo con coincidencias - 1 lo encontre 0 no lo encontre
+    int bandera = 0;
+    struct adminUser entrenador;
+
+    fclose(entrenadores);
+    entrenadores = fopen("Entrenadores.dat", "a+b"); // abrir archivo
+
+    rewind(entrenadores);
+    fseek(entrenadores, 0, SEEK_END);
+
+    int size = ftell(entrenadores);
+
+    if (size == 0)
+    {
+        printf("\nError, no existen entrenadores para ingresar. Crea uno... \n\n");
+        system("pause");
+
+        system("cls");
+    }
+    else
+    {
+
+        rewind(entrenadores);
+
+        fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+
+        while (!feof(entrenadores) && bandera == 0)
+        {
+            if (legajo == entrenador.legajoEntrenador)
+            {
+                if (entrenador.typeAccount == 2)
+                {
+                    printf("\n\n\t\tEncontramos el entrenador...\n\n");
+                    bandera = 1;
+                }
+            }
+            fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+        }
+    }
+
+    printf("\n");
+    system("pause");
+    return bandera;
+}
+
+int acepto(FILE *archActividades, actividades rA, int turno){
+    int accept = 0;
+    if((turno == rA.turno.turnoManiana ||  turno == rA.turno.turnoTarde || turno == rA.turno.turnoNoche) == 1){
+        accept = 1;
+    }
+
+    return accept;
+}
+
+int comprobarActividades(FILE *archActividades, int codigo, int turno, int dia, actividades registroAct){
+    int accept = 0;
+    int bandera = 0;
+    
+    rewind(archActividades);
+
+    fclose(archActividades);
+    archActividades = fopen("Actividades.dat","a+b");
+
+    // una vez abierto comprobamos todo...
+
+    rewind(archActividades);
+
+    fread(&registroAct, sizeof(registroAct), 1, archActividades);
+
+    while(!feof(archActividades) && bandera == 0){
+
+        if(codigo == registroAct.legajoEntrenador){
+            switch(dia){
+                case 1:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                case 2:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                case 3:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                case 4:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                case 5:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                case 6:
+                    accept = acepto(archActividades, registroAct, turno);
+                break;
+                default:
+                    printf("\nHubo un error se ingreos un día equivocado y el programa se corrompera :D");
+            }
+        }
+
+        fread(&registroAct, sizeof(registroAct), 1, archActividades);   
+
+    }   // fin del bucle while
+
+    // si accept aqui esta en 1 significa que encontro una actividad en el mismo turno, en casmbio si no, no la encontro.
+    return accept;
+}
+
+void registrarActEnArch(FILE *archActividades, actividades registroAct){
+
+    rewind(archActividades);
+
+    fclose(archActividades);
+    archActividades = fopen("Actividades.dat","a+b");
+
+    rewind(archActividades);
+    fseek(archActividades,0,SEEK_END);
+
+    fwrite(&registroAct,sizeof(registroAct),1,archActividades);
+
+}
+
+void registrarActividad(FILE *archActividades, FILE *entrenadores, FILE *archSocios, char nombreValidado[10]){
+    char nombreActividad[25];
+    int legajoEntrenador = 0;
+    int turno = 0;
+    int existeEntrenador = 0;
+    int codigo = 0;
+    int comprobacion = 0;
+    int dia = 0;
+    system("cls");
+    struct actividades registroAct;
+
+    rewind(archActividades);
+    fseek(archActividades,0,SEEK_END);
+    
+    rewind(archSocios);
+    fseek(archSocios,0,SEEK_END);
+    
+    int size = ftell(archSocios);
+    
+    if(size == 0){
+    	printf("\nNo podemos registrar una rutina, no existen socios. \n\n");
+    	system("pause");
+	}else{
+        _flushall();
+        printf("Ingrese el nombre de la actividad: ");
+        gets(nombreActividad);
+
+        printf("\nIngrese el legajo del entrenador: ");
+        scanf("%d",&legajoEntrenador);
+
+        printf("\nIngrese el dia de la actividad (1-6): ");
+        scanf("%d", &dia);
+        
+        printf("\nIngrese el turno de la actividad (1-2-3): ");
+        scanf("%d", &turno);
+
+        existeEntrenador = encontrarEntrenador(entrenadores, legajoEntrenador);
+
+        if(existeEntrenador == 1){
+            codigo = generarCodigoActividad();
+            printf("\nComprobaremos si no existe otra actividad en el mismo tiempo... \n\n");
+
+            comprobacion = comprobarActividades(archActividades, codigo, turno, dia, registroAct);
+
+            if(comprobacion == 1){
+                registroAct.codigoActividad = codigo;
+                registroAct.legajoEntrenador = legajoEntrenador;
+                strcpy(registroAct.nombreActividad,nombreActividad);
+
+                switch(dia){
+                    case 1:
+                       registroAct.dias.lunes;
+                    break;
+                    case 2:
+                        registroAct.dias.martes;
+                    break;
+                    case 3:
+                        registroAct.dias.miercoles;
+                    break;
+                    case 4:
+                        registroAct.dias.jueves;
+                    break;
+                    case 5:
+                        registroAct.dias.viernes;
+                    break;
+                    case 6:
+                        registroAct.dias.sabado;
+                    break;
+                    default:
+                        printf("\nHubo un error se ingreos un día equivocado y el programa se corrompera :D");
+                    break;
+                }
+                switch(turno){
+                    case 1:
+                        registroAct.turno.turnoManiana = 1;
+                    break;
+                    case 2:
+                        registroAct.turno.turnoTarde = 1;
+                    break;
+                    case 3:
+                        registroAct.turno.turnoTarde = 1;
+                    break;
+                    default:
+                        printf("\nHubo un error se ingreos un día equivocado y el programa se corrompera :D");
+                    break;
+                }
+
+                registrarActEnArch(archActividades,registroAct);
+            }
+        }else{
+            printf("\n\nNo existe el entrenador, por lo tanto no se pudo generar la actividad.\n\n");
+            system("pause");
+        }
+    }
+}
+
+// # pago-entrenador
+
+int contarCantidades(FILE *archActividades, int legajoEntrenador){
+    struct actividades reg;
+    int contador = 0;
+
+    if(reg.legajoEntrenador == legajoEntrenador){
+        if(reg.dias.lunes == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+        if(reg.dias.martes == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+        if(reg.dias.miercoles == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+        if(reg.dias.jueves == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+        if(reg.dias.viernes == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+        if(reg.dias.sabado == 1){
+            if(reg.turno.turnoManiana == 1){ contador++; }
+            if(reg.turno.turnoTarde == 1){ contador++; }
+            if(reg.turno.turnoNoche == 1){ contador++; }
+        }
+    }
+
+    return contador;
+}
+
+void calcularPagoEntrenador(FILE *archActividades, int legajoEntrenador){
+    printf("\n\nInformación acerca del Entrenador (Legajo): %d ", legajoEntrenador);
+
+    int sueldo = contarCantidades(archActividades, int legajoEntrenador);
+    printf("\nSueldo: $%d franDollars", sueldo*20);
+}
+
+// socios --> actividades --> ? (legajoEntrenador = legajo) : dias --> turnos (counter) : entrenadorNoLegajo
+// se puede hacer de esa forma...
+
+
+void calcularMayorCargaHoraria(FILE *entrenadores, FILE *archActividades){
+    struct adminUser entrenador;
+    struct adminUser maximoEntrenador;
+    struct actividades registroContador;
+    int legajo = 0;
+    int cantidades = 0;
+    int maximo = 0;
+    int legajoMaximo = 0;
+    int bandera = 0;
+
+
+    rewind(entrenadores);
+    rewind(archActividades);
+
+    fseek(entrenadores, 0, SEEK_END);
+    fseek(archActividades, 0, SEEK_END);
+
+    int sizeEntrenadores = ftell(entrenadores);
+    int sizeArchActividades = ftell(archActividades);
+
+    if(sizeEntrenadores == 0 || sizearchActividades == 0){
+        printf("\n\nOcurrio un error, hay algun archivo vacio.");
+    }
+    else{
+
+        rewind(entrenadores);
+        rewind(archActividades);
+
+        fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+
+        while(!feof(entrenadores)){
+            legajo = entrenador.legajoEntrenador;
+
+            cantidades = contarCantidades(archActividades, legajo);
+
+            if(cantidades > maximo){
+                maximo = cantidades;
+                legajoMaximo = legajo;
+            }
+
+            fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+        }
+
+        rewind(entrenadores);
+        rewind(archActividades);
+
+        // como aca ya tengo el legajoMaximo y el maximo total los imprimo por pantalla
+
+        fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+
+        while(!feof(entrenadores) && bandera == 0){
+            if(legajo == legajoMaximo){
+                bandera = 1;
+                maximoEntrenador = entrenador;
+            }
+
+            fread(&entrenador, sizeof(entrenador), 1, entrenadores);
+        }
+
+        printf("\n\n------- # Entrenador con Maxima Carga Horaria # -------");
+
+        printf("\nNombre Usuario: %s", maximoEntrenador.nombreUsuario);
+        printf("\nApellido y nombre: ");
+        _flushall();
+        puts(maximoEntrenador.nombreUsuario);
+        printf("\nLegajo del Entrenador: %d", maximoEntrenador.legajoEntrenador);
+
+        printf("\n\n------- # Entrenador con Maxima Carga Horaria # ------- \n");
+
+        system("pause");
+    }
+
 }
