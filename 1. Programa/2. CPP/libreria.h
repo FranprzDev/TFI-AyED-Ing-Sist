@@ -63,7 +63,7 @@ struct socios{
     char apynom[60];
     char domicilio[30];
     char rutina[4000];
-    actividades actividad[10];
+    actividades actividad;
     // struct enlazado
     // socios --> usuarios.dat
 };
@@ -1067,7 +1067,6 @@ void listarSocios(FILE *archSocios){
         printf("Peso: %.2f kg\n", socio.peso);
         printf("Domicilio: %s \n", socio.domicilio);
         printf("\n--------------------\n");
-
         fread(&socio, sizeof(socios), 1, archSocios);
         contador++;
     }
@@ -1255,6 +1254,7 @@ int generarCodigoActividad() {
   srand(time(NULL));
   int codigo = rand() % 1000000000 + 100000000;
   return codigo;
+  // genera numeros randoms >= 100000000  y < 1000000000 
 }
 
 
@@ -1644,7 +1644,7 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 	int maxActividades = 10;
 	struct socios regSocio;
 	struct actividades regAct;
-
+	struct actividades guardAct;
 	
 	int sizeSoc = 0, sizeAct = 0;
 	int bandera = 0, contador = 0;
@@ -1669,7 +1669,7 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 		
 		fread(&regSocio, sizeof(socios), 1, archSocios);
 
-		while(!feof(archSocios)){
+		while(!feof(archSocios) && bandera == 0){
 			if(nroSocio == regSocio.nroSoc){
 				bandera = 1;
 			}
@@ -1689,42 +1689,54 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 			printf("\n\nIngrese el codigo de la actividad que desea registrar a %d: ", nroSocio);
 			scanf("%d", &codigoActividad);
 
-
-			rewind(archSocios);
-						
-			fread(&regSocio, sizeof(socios), 1, archSocios);
-
-			while(!feof(archSocios)){
-					if(nroSocio == regSocio.nroSoc){
-						bandera = 1;
-					}
-					if(bandera != 1){
-						fread(&regSocio, sizeof(socios), 1, archSocios);
-					}
-			}
-			
-			posicionWrite = encontrarPosicionVacia(regSocio.actividad);
-			bandera = 0;
+			/* De aqui voy a buscar la actividad para tenerla cargada... */
 			rewind(archActividades);
-			
 			fread(&regAct, sizeof(actividades), 1, archActividades);
-			
-			while(!feof(archActividades)){
+
+			int banderaActividades = 1;
+			while(!feof(archActividades) && banderaActividades == 0){
 				if(codigoActividad == regAct.codigoActividad){
-					encontroActividad = 1;
-					bandera = 1;
+					banderaActividades = 1;
+					
+					guardAct = regAct;
 				}
-				if(bandera != 1){
-					fread(&regAct, sizeof(actividades), 1, archActividades);
+				
+				fread(&regAct, sizeof(actividades), 1, archActividades);
+			}
+			
+			// ya tengo el registro que quiero guardar en el socio en guardAct tengo que mandarlo al socio correcto.
+			
+			int banderaSocios = 1;
+			rewind(archSocios);
+			
+			fread(&regSocio, sizeof(socios), 1, archSocios);
+			
+			while(!feof(archSocios) && banderaSocios == 0){
+				if(nroSocio == regSocio.nroSoc){
+					banderaSocios = 1;
+					// los paso asi porque regSocio = guardAct no funca jksadkjsajks
+					regSocio.actividad.codigoActividad = guardAct.codigoActividad;
+					regSocio.actividad.legajoEntrenador = guardAct.legajoEntrenador
+					regSocio.actividad.turno.turnoManiana = guardAct.turno.turnoManiana;
+					regSocio.actividad.turno.turnoTarde = guardAct.turno.turnoTarde;
+					regSocio.actividad.turno.turnoNoche = guardAct.turno.turnoNoche;
+					regSocio.actividad.dias.lunes = guardAct.dias.lunes;
+					regSocio.actividad.dias.martes = guardAct.dias.martes;
+					regSocio.actividad.dias.miercoles = guardAct.dias.miercoles;
+					regSocio.actividad.dias.jueves = guardAct.dias.jueves;
+					regSocio.actividad.dias.viernes = guardAct.dias.viernes;
+					regSocio.actividad.dias.sabado = guardAct.dias.sabado;
+					printf("\nSe guardo correctamente la actividad en el socio. \n\n");
 				}
+
+				fread(&regSocio, sizeof(socios), 1, archSocios);
 			}
 
-			if(encontroActividad == 1){
-				printf("\n\nEscribiremos la actividad en el socio %d \n\n", nroSocio);
-				
-				regSocio.actividad[posicionWrite] = regAct;
+
+			if(banderaSocios == 1 && banderaActividades == 1){
+				printf("\n\nSe escribio la actividad en el socio %d \n\n", nroSocio);
 			}else{
-				printf("\n\nNo se pudo registrar la actividad, el numero de actividad no coincide... \n\n");
+				printf("\n\nHubo un error, cambia de lenguaje de programacion a Python...");
 			}
 			
 		}else{
@@ -1735,3 +1747,47 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 	system("pause");
 }
 
+void listadoSociosActividad(FILE *archSocios){
+	system("cls");
+	
+	struct socios regSocio;
+	int contador = 1;
+	
+	rewind(archSocios);
+	listarSocios(archSocios);
+	
+	fclose(archSocios);
+	archSocios = fopen("Socios.dat","a+b");
+	
+	printf("\n\n--- Actividades ---\n\n");
+	
+	rewind(archSocios);
+	
+	fread(&regSocio, sizeof(socios), 1, archSocios);
+	
+	while(!feof(archSocios)){
+		if(regSocio.actividad.codigoActividad >= 100000000 && regSocio.actividad.codigoActividad < 1000000000){
+			printf("Socio [%d]\n", regSocio.nroSoc);
+			printf("Nombre de la actividad: \n");
+			puts(regSocio.actividad.nombreActividad);
+			printf("Legajo del Entrenador: %d \n", regSocio.actividad.legajoEntrenador);
+			printf("Codigo de la Actividad: %d \n", regSocio.actividad.codigoActividad);
+			
+			if(regSocio.actividad.dias.lunes == 1){ printf("Realiza la actividad un lunes... \n"); }
+			if(regSocio.actividad.dias.martes == 1){ printf("Realiza la actividad un martes... \n"); }
+			if(regSocio.actividad.dias.miercoles == 1){ printf("Realiza la actividad un miercoles... \n"); }
+			if(regSocio.actividad.dias.jueves == 1){ printf("Realiza la actividad un jueves... \n"); }
+			if(regSocio.actividad.dias.viernes == 1){ printf("Realiza la actividad un viernes... \n"); }
+			if(regSocio.actividad.dias.sabado == 1){ printf("Realiza la actividad un sabado... \n"); }
+			
+			
+			if(regSocio.actividad.turno.turnoManiana == 1){ printf("Realiza la actividad por la maniana... \n"); }
+			if(regSocio.actividad.turno.turnoTarde == 1){ printf("Realiza la actividad por la tarde... \n"); }
+			if(regSocio.actividad.turno.turnoNoche == 1){ printf("Realiza la actividad por la noche... \n"); }
+			printf("\n");
+			contador++;
+		}
+		
+		fread(&regSocio, sizeof(socios), 1, archSocios);
+	}
+}
