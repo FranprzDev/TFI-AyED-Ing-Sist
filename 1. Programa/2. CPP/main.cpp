@@ -126,12 +126,16 @@ int main(void){
                                 	system("pause");
 								}
                             }while(inicioSesion == 0);
-
+							
+							system("cls");
                             opcSwitchJoinGym = menuJoinGym();
 
                             switch(opcSwitchJoinGym){
                                 case 1:
-                                    //listadoSociosActividad(archSocios);
+                                    listadoSociosActividad(archSocios);
+                                    
+                                    printf("\n\n");
+                                    system("pause");
                                 break;
                                 case 2:
                                     registrarRutina(archSocios);
