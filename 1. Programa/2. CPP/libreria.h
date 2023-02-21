@@ -1716,7 +1716,7 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 					banderaSocios = 1;
 					// los paso asi porque regSocio = guardAct no funca jksadkjsajks
 					regSocio.actividad.codigoActividad = guardAct.codigoActividad;
-					regSocio.actividad.legajoEntrenador = guardAct.legajoEntrenador
+					regSocio.actividad.legajoEntrenador = guardAct.legajoEntrenador;
 					regSocio.actividad.turno.turnoManiana = guardAct.turno.turnoManiana;
 					regSocio.actividad.turno.turnoTarde = guardAct.turno.turnoTarde;
 					regSocio.actividad.turno.turnoNoche = guardAct.turno.turnoNoche;
