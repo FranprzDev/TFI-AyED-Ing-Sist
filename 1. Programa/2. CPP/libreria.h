@@ -1172,10 +1172,11 @@ int contarPalabras(char cadena[4000]){
     
     for(i=0; i<longitud; i++)
     {
-        if(cadena[i] == ' ' || cadena[i] == '\0')
-        {
-            contadorPalabras++;
+        if(cadena[i] != '\0'){
+            i = longitud;
         }
+
+        contadorPalabras++;
     }
     
     return (contadorPalabras + 1);
@@ -1693,8 +1694,8 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 			rewind(archActividades);
 			fread(&regAct, sizeof(actividades), 1, archActividades);
 
-			int banderaActividades = 1;
-			while(!feof(archActividades) && banderaActividades == 0){
+			int banderaActividades = 0;
+			while(!feof(archActividades) && banderaActividades == 1){
 				if(codigoActividad == regAct.codigoActividad){
 					banderaActividades = 1;
 					
@@ -1706,12 +1707,12 @@ void registrarActividadSocio(FILE *archSocios, FILE *archActividades, int nroSoc
 			
 			// ya tengo el registro que quiero guardar en el socio en guardAct tengo que mandarlo al socio correcto.
 			
-			int banderaSocios = 1;
+			int banderaSocios = 0;
 			rewind(archSocios);
 			
 			fread(&regSocio, sizeof(socios), 1, archSocios);
 			
-			while(!feof(archSocios) && banderaSocios == 0){
+			while(!feof(archSocios) && banderaSocios == 1){
 				if(nroSocio == regSocio.nroSoc){
 					banderaSocios = 1;
 					// los paso asi porque regSocio = guardAct no funca jksadkjsajks
