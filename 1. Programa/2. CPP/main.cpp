@@ -97,6 +97,7 @@ int main(void){
                                 printf("Eligio un tipo de usuario incorrecto.");
                                 break;                        
                         }
+                        break;
                     case 2:
                     	printf("\nIngrese el tipo que desea listar: ");
                     	printf("\n1. Administradores \t\t 2. Entrenadores ");
@@ -107,6 +108,7 @@ int main(void){
                     	listarEntrenadores(entrenadores, tipoListar);
                     	
                     	system("pause");
+                        break;
                     case 10:
                         casoDiez();
                     break;
